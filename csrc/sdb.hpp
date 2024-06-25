@@ -16,7 +16,21 @@
 #ifndef __SDB_H__
 #define __SDB_H__
 
-#include <common.h>
+#include "verilated.h"
+#include "Vrv32i___024root.h"
+#include "Vrv32i.h"
+#include <ostream>
+#include <iostream>
+
+#define ARRLEN(arr) (sizeof(arr) / sizeof((arr)[0]))
+
+extern VerilatedContext* contextp;
+extern Vrv32i* top;
+
+
+
+void sdb_mainloop();
+void cpu_exec(uint64_t n);
 
 typedef struct watchpoint {
   int NO;
@@ -27,7 +41,7 @@ typedef struct watchpoint {
 
 } WP;
 
-word_t expr(char *e, bool *success);
+__uint32_t expr(char *e, bool *success);
 WP* new_wp(const char* expre);
 void free_wp(int n);
 void print_wp();

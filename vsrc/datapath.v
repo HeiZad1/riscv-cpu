@@ -131,6 +131,8 @@ module datapath(input                  clk,
     output             [`XLEN-1: 0]     InstrD                     ,
     output             [`XLEN-1: 0]     mask                       
                 );
+    
+    
 
     wire               [`XLEN-1: 0]     PCFNext                    ;
     wire               [`XLEN-1: 0]     PCPlus4F                   ;
@@ -166,7 +168,7 @@ module datapath(input                  clk,
     assign                              Rs2D                      = InstrD[24:20];
     assign                              RdD                       = InstrD[11: 7];
     assign                              offset                    = ALUResultM[1:0];
-  
+    import "DPI-C" function void itrace(input int PCF, input int PCD,input int PCE,input int INF,input int IND);
     import "DPI-C" function void handle_ebreak();
   // next PC logic
   enflopr #(`XLEN)  pcreg(clk, reset, ~stallF,PCFNext, PCF);
@@ -232,7 +234,9 @@ module datapath(input                  clk,
             end
         end
         end
-    
+    always@(posedge clk) begin
+        itrace(PCF,PCD,PCE,Instr,InstrD);
+    end
 endmodule
 
 

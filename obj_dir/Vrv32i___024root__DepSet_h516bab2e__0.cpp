@@ -6,6 +6,24 @@
 #include "Vrv32i__Syms.h"
 #include "Vrv32i___024root.h"
 
+extern "C" void itrace(int PCF, int PCD, int PCE, int INF, int IND);
+
+VL_INLINE_OPT void Vrv32i___024root____Vdpiimwrap_rv32i__DOT__rv__DOT__dp__DOT__itrace_TOP(IData/*31:0*/ PCF, IData/*31:0*/ PCD, IData/*31:0*/ PCE, IData/*31:0*/ INF, IData/*31:0*/ IND) {
+    VL_DEBUG_IF(VL_DBG_MSGF("+    Vrv32i___024root____Vdpiimwrap_rv32i__DOT__rv__DOT__dp__DOT__itrace_TOP\n"); );
+    // Body
+    int PCF__Vcvt;
+    for (size_t PCF__Vidx = 0; PCF__Vidx < 1; ++PCF__Vidx) PCF__Vcvt = PCF;
+    int PCD__Vcvt;
+    for (size_t PCD__Vidx = 0; PCD__Vidx < 1; ++PCD__Vidx) PCD__Vcvt = PCD;
+    int PCE__Vcvt;
+    for (size_t PCE__Vidx = 0; PCE__Vidx < 1; ++PCE__Vidx) PCE__Vcvt = PCE;
+    int INF__Vcvt;
+    for (size_t INF__Vidx = 0; INF__Vidx < 1; ++INF__Vidx) INF__Vcvt = INF;
+    int IND__Vcvt;
+    for (size_t IND__Vidx = 0; IND__Vidx < 1; ++IND__Vidx) IND__Vcvt = IND;
+    itrace(PCF__Vcvt, PCD__Vcvt, PCE__Vcvt, INF__Vcvt, IND__Vcvt);
+}
+
 extern "C" void handle_ebreak();
 
 VL_INLINE_OPT void Vrv32i___024root____Vdpiimwrap_rv32i__DOT__rv__DOT__dp__DOT__handle_ebreak_TOP() {

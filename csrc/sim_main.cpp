@@ -5,7 +5,9 @@
   #include <iostream>
   #include <getopt.h>
   #include <cassert>
-  #include "sdb.h"
+  #include "sdb.hpp"
+ #include "verilated_vcd_c.h"
+
     
   
     #define BLUE    "\033[34m"
@@ -16,6 +18,9 @@
     static char *diff_so_file = NULL;
     static char *img_file = NULL;
     static int difftest_port = 1234;
+    VerilatedContext* contextp = nullptr;
+    VerilatedVcdC* tfp = nullptr;
+    Vrv32i* top = nullptr;
     
     extern "C" void initialize_imem(const char* filename);
     extern "C" void handle_ebreak();
@@ -60,6 +65,20 @@
   return 0;
 }
 
+    void cpu_exec(uint64_t n){
+        for(;n>0;n --){   
+             
+        top->clk = !top->clk;
+        top->eval();
+        tfp->dump(contextp->time());
+        contextp->timeInc(1);
+
+        top->clk = !top->clk;
+        top->eval();
+        tfp->dump(contextp->time());
+        contextp->timeInc(1);
+        }
+    }
 
  int main(int argc, char** argv) {
     /*
@@ -68,32 +87,42 @@
         return EXIT_FAILURE;
     }*/
     //const char* file_path = argv[1];
-
-    VerilatedContext* contextp = new VerilatedContext;  // 创建一个VerilatedContext对象，用于管理仿真上下文
+    
+    contextp = new VerilatedContext;  // 创建一个VerilatedContext对象，用于管理仿真上下文
     contextp->commandArgs(argc, argv);                  // 解析命令行参数
+
+    top = new Vrv32i{contextp};
+
+    tfp = new VerilatedVcdC;
+    Verilated::traceEverOn(true);
+    top->trace(tfp, 99);
+    tfp->open("rv32i.vcd");
     
-    
-     Vrv32i* top = new Vrv32i{contextp};                     // 创建顶层模块的实例
+                          // 创建顶层模块的实例
      //parse_args(argc,argv);
      //std::cout<<BLUE<<img_file<<std::endl;
      //load_imem(img_file);
      initialize_imem("riscvtest.txt");
      top->clk = 0;
-     top->reset = 1;
+     top->reset = 0;
      int reset_cycles = 10; 
-    // 仿真主循环
-    while (!contextp->gotFinish()) {
-        top->clk = !top->clk; 
-        if (reset_cycles > 0) {
-            reset_cycles--;
-        } else {
-            top->reset = 0;  // 结束复位
-        }
-        top->eval(); 
+     if (reset_cycles > 0) {
+        top->clk = !top->clk;
+        top->eval();
         contextp->timeInc(1);
-       
-       
-    }
+        tfp->dump(contextp->time()); 
+        reset_cycles--;
+        } else {
+            top->reset = 1;  // 结束复位
+        }
+        //top->eval();
+    // 仿真主循环
+    sdb_mainloop();
+
+    tfp->close();
+    delete tfp;
+
+    top->final();
 
     delete top;                                         // 释放顶层模块实例的内存
     delete contextp;                                    // 释放仿真上下文的内存

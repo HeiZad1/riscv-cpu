@@ -149,10 +149,10 @@ VL_ATTR_COLD void Vrv32i___024root___stl_sequent__TOP__0(Vrv32i___024root* vlSel
         vlSelf->rv32i__DOT__mask = 0U;
         vlSelf->WriteData = 0U;
     }
-    Vrv32i___024root____Vdpiimwrap_rv32i__DOT__imem__DOT__read_imem_TOP(vlSelf->rv32i__DOT__PC, vlSelf->__Vfunc_rv32i__DOT__imem__DOT__read_imem__1__Vfuncout);
-    vlSelf->rv32i__DOT__Instr = vlSelf->__Vfunc_rv32i__DOT__imem__DOT__read_imem__1__Vfuncout;
-    Vrv32i___024root____Vdpiimwrap_rv32i__DOT__dmem__DOT__read_dmem_TOP(vlSelf->DataAdr, vlSelf->__Vfunc_rv32i__DOT__dmem__DOT__read_dmem__2__Vfuncout);
-    vlSelf->rv32i__DOT__ReadData = vlSelf->__Vfunc_rv32i__DOT__dmem__DOT__read_dmem__2__Vfuncout;
+    Vrv32i___024root____Vdpiimwrap_rv32i__DOT__imem__DOT__read_imem_TOP(vlSelf->rv32i__DOT__PC, vlSelf->__Vfunc_rv32i__DOT__imem__DOT__read_imem__2__Vfuncout);
+    vlSelf->rv32i__DOT__Instr = vlSelf->__Vfunc_rv32i__DOT__imem__DOT__read_imem__2__Vfuncout;
+    Vrv32i___024root____Vdpiimwrap_rv32i__DOT__dmem__DOT__read_dmem_TOP(vlSelf->DataAdr, vlSelf->__Vfunc_rv32i__DOT__dmem__DOT__read_dmem__3__Vfuncout);
+    vlSelf->rv32i__DOT__ReadData = vlSelf->__Vfunc_rv32i__DOT__dmem__DOT__read_dmem__3__Vfuncout;
     vlSelf->rv32i__DOT__rv__DOT__c__DOT__ad__DOT__RtypeSub 
         = (IData)((0x40000020U == (0x40000020U & vlSelf->rv32i__DOT__rv__DOT__InstrD)));
     vlSelf->__Vtableidx1 = (0x7fU & vlSelf->rv32i__DOT__rv__DOT__InstrD);
@@ -526,8 +526,8 @@ VL_ATTR_COLD void Vrv32i___024root___ctor_var_reset(Vrv32i___024root* vlSelf) {
     }
     vlSelf->rv32i__DOT__rv__DOT__hu__DOT__lwStall = VL_RAND_RESET_I(1);
     vlSelf->rv32i__DOT__dmem__DOT__unnamedblk1__DOT__masked_data = 0;
-    vlSelf->__Vfunc_rv32i__DOT__imem__DOT__read_imem__1__Vfuncout = 0;
-    vlSelf->__Vfunc_rv32i__DOT__dmem__DOT__read_dmem__2__Vfuncout = 0;
+    vlSelf->__Vfunc_rv32i__DOT__imem__DOT__read_imem__2__Vfuncout = 0;
+    vlSelf->__Vfunc_rv32i__DOT__dmem__DOT__read_dmem__3__Vfuncout = 0;
     vlSelf->__Vtableidx1 = 0;
     vlSelf->__Vtableidx2 = 0;
     vlSelf->__Vdlyvdim0__rv32i__DOT__rv__DOT__dp__DOT__rff__DOT__rf__v0 = 0;

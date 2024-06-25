@@ -7,23 +7,33 @@
 #include "verilated.h"
 #include "Vrv32i___024root.h"
 #include "Vrv32i.h"
+#include <deque>
+#include <string>
+#include <iomanip> 
+ #include "sdb.hpp"
 
 std::unordered_map<uint32_t, uint32_t> imem;
 std::unordered_map<uint32_t, uint32_t> dmem;
+std::deque<std::string> bufferPC = {"00000000", "00000000","00000000"};
+std::deque<std::string> bufferIN = {"00000000", "00000000","00000000","00000000"};
 
 // DPIC函数
 // DPIC函数
-
+std::string toHexString(uint32_t value) {
+    std::stringstream ss;
+    ss << std::hex << std::setw(8) << std::setfill('0') << value;
+    return ss.str();
+}
 extern "C" void write_imem(uint32_t addr, uint32_t data);
 extern "C" void handle_ebreak() {
-    /*
-    if (a0_value != 0) {
-        std::cerr << "Error: a0 register value is " << a0_value << std::endl;
+    
+    if (top->rootp->rv32i__DOT__rv__DOT__dp__DOT__rff__DOT__rf[10] != 0) {
+        std::cerr << "HIT BAD TRAP " << std::endl;
         std::exit(EXIT_FAILURE);
     } else {
-        std::cout << "Program terminated successfully." << std::endl;
+        std::cout << "HIT GOOD TRAP" << std::endl;
         std::exit(EXIT_SUCCESS);
-    }*/
+    }
     std::cout << "Program terminated successfully." << std::endl;
     Verilated::gotFinish(true); 
 }
@@ -84,8 +94,8 @@ extern "C" void load_imem(const char* filename) {
 extern "C" uint32_t read_imem(uint32_t addr) {
     auto it = imem.find(addr);
     if (it != imem.end()) {
-        std::cout<< "IMEM read success:  address 0x" << std::hex << addr << std::endl;
-        std::cout<< "IMEM read data   :          0x" << std::hex << it->second << std::endl;
+        //std::cout<< "IMEM read success:  address 0x" << std::hex << addr << std::endl;
+        //std::cout<< "IMEM read data   :          0x" << std::hex << it->second << std::endl;
         return it->second;
     } else {
         std::cerr << "IMEM read error: invalid address 0x" << std::hex << addr << std::endl;
@@ -115,3 +125,26 @@ extern "C" uint32_t read_dmem(uint32_t addr) {
 extern "C" void write_dmem(uint32_t addr, uint32_t data) {
     dmem[addr] = data;
 }
+
+extern "C" void itrace(uint32_t PCF, uint32_t PCD,uint32_t PCE,uint32_t INF,uint32_t IND){
+    std::cout<<"==========================================="<<std::endl;
+    std::cout << "F:PC : " << std::hex << std::setw(8) << std::setfill('0') << PCF
+              << " INS: " << std::hex << std::setw(8) << std::setfill('0') << INF << std::endl;
+    std::cout << "D:PC : " << std::hex << std::setw(8) << std::setfill('0') << PCD
+              << " INS: " << std::hex << std::setw(8) << std::setfill('0') << IND << std::endl;
+    
+    bufferPC.pop_back();
+    bufferIN.pop_back();
+    bufferPC.push_front(toHexString(PCE));
+    bufferIN.push_front(toHexString(IND));
+    std::cout << "E:PC : " << std::hex << std::setw(8) << std::setfill('0') << PCE
+              << " INS: " << bufferIN[1] << std::endl;
+    std::cout<<"W:PC : "<< std::hex << bufferPC[1]<<" INS: "<< std::hex<<bufferIN[2]<<std::endl;
+    std::cout<<"M:PC : "<< std::hex << bufferPC[2]<<" INS: "<< std::hex<<bufferIN[3]<<std::endl;
+    std::cout<<"==========================================="<<std::endl;
+
+
+
+}
+
+

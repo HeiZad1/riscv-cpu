@@ -20,9 +20,20 @@
 #include <readline/history.h>
 //#include <memory/host.h>
 //#include <memory/paddr.h>
-#include "sdb.h"
+#include "sdb.hpp"
+#include <ostream>
+#include <iostream>
+
+const char *regs[] = {
+  "$0", "ra", "sp", "gp", "tp", "t0", "t1", "t2",
+  "s0", "s1", "a0", "a1", "a2", "a3", "a4", "a5",
+  "a6", "a7", "s2", "s3", "s4", "s5", "s6", "s7",
+  "s8", "s9", "s10", "s11", "t3", "t4", "t5", "t6"
+};
 
 static int is_batch_mode = false;
+extern "C" uint32_t read_dmem(uint32_t addr);
+extern void isa_reg_display();
 
 void init_regex();
 void init_wp_pool();
@@ -36,7 +47,7 @@ static char* rl_gets() {
     line_read = NULL;
   }
 
-  line_read = readline("(nemu) ");
+  line_read = readline("(npc) ");
 
   if (line_read && *line_read) {
     add_history(line_read);
@@ -78,7 +89,7 @@ static int cmd_info(char *args){
     if (cmd_type == 'r') {
       isa_reg_display();
     } else if (cmd_type == 'w') {
-      print_wp();
+      //print_wp();
     } else {
       printf("Error: Unknown command type '%c'.\n", cmd_type);
       return -1;
@@ -91,11 +102,12 @@ static int cmd_info(char *args){
 }
 
 static int cmd_x(char *args){
+  
   int nb_mem;
-  paddr_t addr_mem;
+  __uint32_t addr_mem;
   if (sscanf(args," %d %x",&nb_mem,&addr_mem)==2){
     for(int i=0;i<nb_mem;i++){
-      printf("%x\n",paddr_read(addr_mem,4));//len 是4不是32
+      printf("%x\n",read_dmem(addr_mem));//len 是4不是32
       addr_mem = addr_mem +4;
     }
     return 0;
@@ -109,7 +121,7 @@ static int cmd_x(char *args){
 }
 //表达式不能有空格
 static int cmd_p(char *args){
-  char expre[32];
+  /*char expre[32];
   bool success = false;
   if (sscanf(args, "%32s", expre)==1){
     printf("%u\n",expr(expre,&success));
@@ -117,24 +129,24 @@ static int cmd_p(char *args){
   else {
     printf("Error:Arguments parsing failed.\n");
     return -1;
-  }
+  }*/
   return 0;
 }
 
 static int cmd_w(char *args){
-  char expr[32];
+  /*char expr[32];
   if (sscanf(args," %32s",expr)==1){
     new_wp(expr);
   }
   else {
     printf("Error:Arguments parsing failed.\n");
     return -1;
-  }
+  }*/
   return 0;
 }
 
 static int cmd_d(char *args){
-  int no;
+  /*int no;
   if (sscanf(args," %d",&no)==1){
     free_wp(no);
     return 0;
@@ -142,7 +154,7 @@ static int cmd_d(char *args){
   else {
     printf("Error:Arguments parsing failed.\n");
     return -1;
-  }
+  }*/
   return 0;
 
 }
@@ -201,10 +213,11 @@ void sdb_mainloop() {
     cmd_c(NULL);
     return;
 
-    
+
   }
 
   for (char *str; (str = rl_gets()) != NULL; ) {
+    if(contextp->gotFinish()) break;
     char *str_end = str + strlen(str);
 
     /* extract the first token as the command */
@@ -238,9 +251,17 @@ void sdb_mainloop() {
 
 void init_sdb() {
   /* Compile the regular expressions. */
-  init_regex();
+  //init_regex();
 
   /* Initialize the watchpoint pool. */
-  init_wp_pool();
+  //init_wp_pool();
 }
+
+void isa_reg_display(){
+  for(int i=0;i<32;i++){
+    std::cout<<  regs[i]<<":" << top->rootp->rv32i__DOT__rv__DOT__dp__DOT__rff__DOT__rf[i]<<std::endl;
+  }
+
+}
+
 

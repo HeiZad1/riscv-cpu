@@ -16,6 +16,9 @@ CPP_SRCS = $(wildcard $(CPP_DIR)/*.cpp)
 # 生成的对象文件目录
 OBJ_DIR = obj_dir
 
+# VCD file
+VCD_FILE = $(TOP).vcd
+
 # 包含路径
 INCLUDE_DIRS = -I$(VERILOG_DIR) -I$(INCLUDE_DIR)
 
@@ -28,7 +31,7 @@ $(OBJ_DIR):
 
 # 编译生成的Makefile文件
 $(OBJ_DIR)/V$(TOP).mk: $(VERILOG_SRCS) $(CPP_SRCS) | $(OBJ_DIR)
-	verilator -Wall $(INCLUDE_DIRS) $(DEFINES) $(VERILOG_SRCS) --cc --exe $(CPP_SRCS) --CFLAGS "-fPIC" --trace --top-module $(TOP)
+	verilator -Wall $(INCLUDE_DIRS) $(DEFINES) $(VERILOG_SRCS) --cc --exe $(CPP_SRCS) --CFLAGS "-fPIC" --LDFLAGS "-lreadline" --trace --top-module $(TOP)
 
 # 编译目标
 compile: $(OBJ_DIR)/V$(TOP).mk
@@ -36,7 +39,10 @@ compile: $(OBJ_DIR)/V$(TOP).mk
 
 # 运行仿真
 run: compile
-	$(OBJ_DIR)/V$(TOP)
+	$(OBJ_DIR)/V$(TOP) -lreadline
+
+view: $(VCD_FILE)
+	gtkwave $(VCD_FILE)
 
 # 清理生成文件
 clean:

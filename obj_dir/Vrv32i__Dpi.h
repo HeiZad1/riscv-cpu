@@ -16,8 +16,10 @@ extern "C" {
 
 
     // DPI IMPORTS
-    // DPI import at vsrc/datapath.v:170:34
+    // DPI import at vsrc/datapath.v:172:34
     extern void handle_ebreak();
+    // DPI import at vsrc/datapath.v:171:34
+    extern void itrace(int PCF, int PCD, int PCE, int INF, int IND);
     // DPI import at vsrc/dmem.v:10:31
     extern int read_dmem(int addr);
     // DPI import at vsrc/imem.v:5:31

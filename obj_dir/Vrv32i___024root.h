@@ -94,8 +94,8 @@ class alignas(VL_CACHE_LINE_BYTES) Vrv32i___024root final : public VerilatedModu
         IData/*31:0*/ rv32i__DOT__rv__DOT__dp__DOT__ReadDataW;
         IData/*31:0*/ rv32i__DOT__rv__DOT__dp__DOT__writeReg;
         IData/*31:0*/ rv32i__DOT__dmem__DOT__unnamedblk1__DOT__masked_data;
-        IData/*31:0*/ __Vfunc_rv32i__DOT__imem__DOT__read_imem__1__Vfuncout;
-        IData/*31:0*/ __Vfunc_rv32i__DOT__dmem__DOT__read_dmem__2__Vfuncout;
+        IData/*31:0*/ __Vfunc_rv32i__DOT__imem__DOT__read_imem__2__Vfuncout;
+        IData/*31:0*/ __Vfunc_rv32i__DOT__dmem__DOT__read_dmem__3__Vfuncout;
         IData/*31:0*/ __Vdlyvval__rv32i__DOT__rv__DOT__dp__DOT__rff__DOT__rf__v0;
         IData/*31:0*/ __VactIterCount;
         VlUnpacked<IData/*31:0*/, 32> rv32i__DOT__rv__DOT__dp__DOT__rff__DOT__rf;

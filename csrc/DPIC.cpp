@@ -117,16 +117,16 @@ extern "C" void write_dmem(uint32_t addr, uint32_t data) {
 
 extern "C" void itrace(uint32_t PCF, uint32_t PCD,uint32_t PCE,uint32_t INF,uint32_t IND){
     std::cout<<"==========================================="<<std::endl;
-    std::cout << "F:PC : " << std::hex << std::setw(8) << std::setfill('0') << PCF+0x80000000
+    std::cout << "F:PC : " << std::hex << std::setw(8) << std::setfill('0') << PCF
               << " INS: " << std::hex << std::setw(8) << std::setfill('0') << INF << std::endl;
-    std::cout << "D:PC : " << std::hex << std::setw(8) << std::setfill('0') << PCD+0x80000000
+    std::cout << "D:PC : " << std::hex << std::setw(8) << std::setfill('0') << PCD
               << " INS: " << std::hex << std::setw(8) << std::setfill('0') << IND << std::endl;
     
     bufferPC.pop_back();
     bufferIN.pop_back();
-    bufferPC.push_front(toHexString(PCE+0x80000000));
+    bufferPC.push_front(toHexString(PCE));
     bufferIN.push_front(toHexString(IND));
-    std::cout << "E:PC : " << std::hex << std::setw(8) << std::setfill('0') << PCE+0x80000000
+    std::cout << "E:PC : " << std::hex << std::setw(8) << std::setfill('0') << PCE
               << " INS: " << bufferIN[1] << std::endl;
     std::cout<<"W:PC : "<< std::hex << bufferPC[1]<<" INS: "<< std::hex<<bufferIN[2]<<std::endl;
     std::cout<<"M:PC : "<< std::hex << bufferPC[2]<<" INS: "<< std::hex<<bufferIN[3]<<std::endl;

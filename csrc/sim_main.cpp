@@ -126,7 +126,7 @@
         } else {
             top->reset = 1;  // 结束复位
         }
-        //top->eval();
+        top->eval();
     // 仿真主循环
     //init_nemu_mem();
     #ifdef difftest1

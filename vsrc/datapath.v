@@ -137,8 +137,8 @@ module datapath(input                  clk,
     wire               [`XLEN-1: 0]     PCFNext                    ;
     wire               [`XLEN-1: 0]     PCPlus4F                   ;
     wire               [`XLEN-1: 0]     PCTargetE                  ;
-  //wire [`XLEN-1:0] PCTargetW;
-  //wire [`XLEN-1:0] PCTargetM;
+    wire [`XLEN-1:0] PCTargetW;
+    wire [`XLEN-1:0] PCTargetM;
     wire               [`XLEN-1: 0]     PCD                        ;
     wire               [`XLEN-1: 0]     PCPlus4D                   ;
     wire               [`XLEN-1: 0]     PCE                        ;
@@ -214,17 +214,17 @@ module datapath(input                  clk,
     flopr #(`XLEN) Mreg2 (clk, reset , WriteDataE,WriteDataM);
     flopr #( `RFIDX_WIDTH) Mreg3 (clk, reset , RdE, RdM);
     flopr #(`XLEN) Mreg4 (clk, reset , PCPlus4E, PCPlus4M);
-	//flopr #(`XLEN) Mreg11(clk, reset , PCTargetE, PCTargetM);
+	flopr #(`XLEN) Mreg11(clk, reset , PCTargetE, PCTargetM);
 	
 	//RegW
     flopr #(`XLEN) Wreg1(clk, reset , ALUResultM, ALUResultW);
     flopr #(`XLEN) Wreg2(clk, reset , ReadData, ReadDataW);
     flopr #( `RFIDX_WIDTH) Wreg3(clk, reset , RdM, RdW);
     flopr #(`XLEN) Wreg4(clk, reset , PCPlus4M, PCPlus4W);
-	//flopr #(`XLEN) Wreg9(clk, reset , PCTargetM, PCTargetW);
+	flopr #(`XLEN) Wreg9(clk, reset , PCTargetM, PCTargetW);
 	
 	//RES
-    mux3 #(`XLEN)  resultmux(ALUResultW, ReadDataW, PCPlus4W, ResultSrc, ResultW);
+    mux4 #(`XLEN)  resultmux(ALUResultW, ReadDataW, PCPlus4W,PCTargetW, ResultSrc, ResultW);
 	always@(*) begin
     if (reset) begin
             // 复位逻辑

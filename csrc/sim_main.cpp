@@ -19,7 +19,7 @@
     void difftest(uint64_t n);
     void init_nemu_mem();
 
-    static char *log_file = NULL;
+    static char *log_file = NULL;//sasas
     static char *diff_so_file = NULL;
      char *img_file = NULL;
     static int difftest_port = 1234;

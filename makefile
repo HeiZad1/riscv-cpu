@@ -8,7 +8,10 @@ TOP ?= rv32i
 VERILOG_DIR = ./vsrc
 CPP_DIR = ./csrc
 INCLUDE_DIR = ./include
-
+NEMU_DIR = ~/ysyx/ics2023/nemu/build
+NEMU_INCLUDE_DIR = ~/ysyx/ics2023/nemu/include
+CFLAGS = -fPIC 
+LDFLAGS = -lreadline -L$(NEMU_DIR) -Wl,-rpath=$(NEMU_DIR) -Wl,-rpath-link=$(NEMU_DIR) $(NEMU_DIR)/riscv32-nemu-interpreter-so  
 # Verilog源文件
 VERILOG_SRCS = $(wildcard $(VERILOG_DIR)/*.v)
 CPP_SRCS = $(wildcard $(CPP_DIR)/*.cpp)
@@ -22,16 +25,13 @@ VCD_FILE = $(TOP).vcd
 # 包含路径
 INCLUDE_DIRS = -I$(VERILOG_DIR) -I$(INCLUDE_DIR)
 
-# 宏定义
-DEFINES = -DVL_TIME_PRECISION="-12" -D'XLEN=32'
-
 # 生成对象文件目录
 $(OBJ_DIR):
 	mkdir -p $(OBJ_DIR)
 
 # 编译生成的Makefile文件
 $(OBJ_DIR)/V$(TOP).mk: $(VERILOG_SRCS) $(CPP_SRCS) | $(OBJ_DIR)
-	verilator -Wall $(INCLUDE_DIRS) $(DEFINES) $(VERILOG_SRCS) --cc --exe $(CPP_SRCS) --CFLAGS "-fPIC" --LDFLAGS "-lreadline" --trace --top-module $(TOP)
+	verilator -Wall $(INCLUDE_DIRS) $(DEFINES) $(VERILOG_SRCS) --cc --exe $(CPP_SRCS) --CFLAGS "$(CFLAGS)" --LDFLAGS "  $(LDFLAGS)" --trace --top-module $(TOP)
 
 # 编译目标
 compile: $(OBJ_DIR)/V$(TOP).mk
@@ -39,7 +39,7 @@ compile: $(OBJ_DIR)/V$(TOP).mk
 
 # 运行仿真
 run: compile
-	$(OBJ_DIR)/V$(TOP) -lreadline
+	./$(OBJ_DIR)/V$(TOP) /home/swf/ysyx/ics2023/am-kernels/tests/cpu-tests/build/dummy-riscv32e-npc.bin
 
 view: $(VCD_FILE)
 	gtkwave $(VCD_FILE)

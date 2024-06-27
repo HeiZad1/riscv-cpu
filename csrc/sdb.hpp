@@ -21,16 +21,19 @@
 #include "Vrv32i.h"
 #include <ostream>
 #include <iostream>
+#include "difftest.hpp"
 
 #define ARRLEN(arr) (sizeof(arr) / sizeof((arr)[0]))
+   #define difftest1
 
 extern VerilatedContext* contextp;
 extern Vrv32i* top;
-
+//extern  char *regs[];
 
 
 void sdb_mainloop();
 void cpu_exec(uint64_t n);
+//extern "C" void difftest_init(int port);
 
 typedef struct watchpoint {
   int NO;
@@ -45,5 +48,6 @@ __uint32_t expr(char *e, bool *success);
 WP* new_wp(const char* expre);
 void free_wp(int n);
 void print_wp();
+
 
 #endif

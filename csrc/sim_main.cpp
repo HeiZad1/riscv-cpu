@@ -7,16 +7,21 @@
   #include <cassert>
   #include "sdb.hpp"
  #include "verilated_vcd_c.h"
+ #include "difftest.hpp"
 
     
   
     #define BLUE    "\033[34m"
     #define RESET_VECTOR 0x80000000
     #define RESET   "\033[0m"
+ 
+
+    void difftest(uint64_t n);
+    void init_nemu_mem();
 
     static char *log_file = NULL;
     static char *diff_so_file = NULL;
-    static char *img_file = NULL;
+     char *img_file = NULL;
     static int difftest_port = 1234;
     VerilatedContext* contextp = nullptr;
     VerilatedVcdC* tfp = nullptr;
@@ -25,11 +30,14 @@
     extern "C" void initialize_imem(const char* filename);
     extern "C" void handle_ebreak();
     extern "C" void write_imem(uint32_t addr, uint32_t data);
-    extern "C" void load_imem(const char* filename);
+     void load_imem(const char* filename);
+    
+
+
 
     
 
-    static int parse_args(int argc, char *argv[]) {
+    static int parse_args_npc(int argc, char *argv[]) {
     const struct option table[] = {
     {"batch"    , no_argument      , NULL, 'b'},
     {"log"      , required_argument, NULL, 'l'},
@@ -66,6 +74,7 @@
 }
 
     void cpu_exec(uint64_t n){
+        uint64_t t = n;
         for(;n>0;n --){   
              
         top->clk = !top->clk;
@@ -78,6 +87,8 @@
         tfp->dump(contextp->time());
         contextp->timeInc(1);
         }
+
+        
     }
 
  int main(int argc, char** argv) {
@@ -99,10 +110,10 @@
     tfp->open("rv32i.vcd");
     
                           // 创建顶层模块的实例
-     //parse_args(argc,argv);
-     //std::cout<<BLUE<<img_file<<std::endl;
-     //load_imem(img_file);
-     initialize_imem("riscvtest.txt");
+     parse_args_npc(argc,argv);
+     std::cout<<BLUE<<img_file<<std::endl;
+     load_imem(img_file);
+     //initialize_imem("riscvtest.txt");
      top->clk = 0;
      top->reset = 0;
      int reset_cycles = 10; 
@@ -117,7 +128,15 @@
         }
         //top->eval();
     // 仿真主循环
+    //init_nemu_mem();
+    #ifdef difftest1
+    difftest_init(1);
+    init_nemu_mem();
+    cpu_exec(4);
+    //difftest();
+    #endif
     sdb_mainloop();
+
 
     tfp->close();
     delete tfp;
@@ -128,3 +147,9 @@
     delete contextp;                                    // 释放仿真上下文的内存
     return 0;                                           // 返回0，表示程序成功终止
 }
+
+
+
+
+
+

@@ -70,6 +70,9 @@ static int cmd_si(char *args) {
   uint64_t nb_ex;
   if (sscanf(args," %ld",&nb_ex)==1){
     cpu_exec(nb_ex);
+    #ifdef difftest1
+    difftest(nb_ex);
+    #endif
     return 0;
   }
   else {

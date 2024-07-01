@@ -52,7 +52,7 @@ void difftest(uint64_t n){
     std::cout << std::endl;
     for(int i=0;i<32;i++){
         if(top->rootp->rv32i__DOT__rv__DOT__dp__DOT__rff__DOT__rf[i]!=buf_reg[i]){
-            std::cout<<"error state at "<< regs[i] <<"npc reg value : "<< std::hex << top->rootp->rv32i__DOT__rv__DOT__dp__DOT__rff__DOT__rf[i]
+            std::cout<<"error state at "<< regs[i] <<" npc reg value : "<< std::hex << top->rootp->rv32i__DOT__rv__DOT__dp__DOT__rff__DOT__rf[i]
                         <<" nemu reg value: "<<std::hex<< buf_reg[i]<<std::endl;
             
             

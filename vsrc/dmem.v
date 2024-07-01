@@ -16,7 +16,7 @@ module dmem(input          clk, we,
     //if (we) RAM[a[31:2]] <= (RAM[a[31:2]] & ~write_mask) | (wd & write_mask);
     //if (we) write_dmem(addr, wdata);
     int masked_data;
-      masked_data = (read_dmem(a) & ~write_mask) | (wd & write_mask);
+      masked_data =  (wd & write_mask);
       if (we) write_dmem(a, masked_data);
   end
 endmodule

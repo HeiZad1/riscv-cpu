@@ -39,7 +39,7 @@ compile: $(OBJ_DIR)/V$(TOP).mk
 
 # 运行仿真
 run: compile
-	./$(OBJ_DIR)/V$(TOP) /home/swf/ysyx/ics2023/am-kernels/tests/cpu-tests/build/dummy-riscv32e-npc.bin
+	./$(OBJ_DIR)/V$(TOP) /home/swf/ysyx/ics2023/am-kernels/tests/cpu-tests/build/add-riscv32e-npc.bin
 
 view: $(VCD_FILE)
 	gtkwave $(VCD_FILE)

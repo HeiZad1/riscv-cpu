@@ -15,7 +15,8 @@ std::string toHexString(uint32_t value) {
 }
 extern "C" void write_imem(uint32_t addr, uint32_t data);
 extern "C" void handle_ebreak() {
-    
+    if(bufferPC[2]=="00100073"){
+
     if (top->rootp->rv32i__DOT__rv__DOT__dp__DOT__rff__DOT__rf[10] != 0) {
         std::cerr << "HIT BAD TRAP " << std::endl;
         std::exit(EXIT_FAILURE);
@@ -24,7 +25,7 @@ extern "C" void handle_ebreak() {
         std::exit(EXIT_SUCCESS);
     }
     std::cout << "Program terminated successfully." << std::endl;
-    Verilated::gotFinish(true); 
+    Verilated::gotFinish(true); }
 }
 
 extern "C" void initialize_imem(const char* filename) {
@@ -66,6 +67,7 @@ extern "C" void initialize_imem(const char* filename) {
 
     // 读取文件并写入内存
     while (infile.read(reinterpret_cast<char*>(&data), sizeof(data))) {
+        //std::cout<<std::hex<<addr<<std::endl;
         write_imem(addr, data);
         addr += 4; // 每条指令占4个字节
     }
@@ -81,7 +83,7 @@ extern "C" void initialize_imem(const char* filename) {
 
 // 读IMEM
 extern "C" uint32_t read_imem(uint32_t addr) {
-    auto it = imem.find(addr+0x80000000);
+    auto it = imem.find(addr);
     if (it != imem.end()) {
         //std::cout<< "IMEM read success:  address 0x" << std::hex << addr << std::endl;
         //std::cout<< "IMEM read data   :          0x" << std::hex << it->second << std::endl;

@@ -25,10 +25,12 @@ class alignas(VL_CACHE_LINE_BYTES) Vrv32i___024root final : public VerilatedModu
         CData/*0:0*/ rv32i__DOT__rv__DOT__stallD;
         CData/*0:0*/ rv32i__DOT__rv__DOT__stallF;
         CData/*0:0*/ rv32i__DOT__rv__DOT__FlushE;
+        CData/*1:0*/ rv32i__DOT__rv__DOT__ResultSrcE;
         CData/*0:0*/ rv32i__DOT__rv__DOT__loadW;
         CData/*0:0*/ rv32i__DOT__rv__DOT__jarlW;
         CData/*0:0*/ rv32i__DOT__rv__DOT__PCSrcE;
         CData/*1:0*/ rv32i__DOT__rv__DOT__ResultSrcW;
+        CData/*1:0*/ rv32i__DOT__rv__DOT__ResultSrcM;
         CData/*3:0*/ rv32i__DOT__rv__DOT__ALUControlE;
         CData/*1:0*/ rv32i__DOT__rv__DOT__SDypeSecM;
         CData/*1:0*/ rv32i__DOT__rv__DOT__ForWordAE;
@@ -38,8 +40,6 @@ class alignas(VL_CACHE_LINE_BYTES) Vrv32i___024root final : public VerilatedModu
         CData/*4:0*/ rv32i__DOT__rv__DOT__RdE;
         CData/*4:0*/ rv32i__DOT__rv__DOT__Rs1E;
         CData/*4:0*/ rv32i__DOT__rv__DOT__Rs2E;
-        CData/*1:0*/ rv32i__DOT__rv__DOT__c__DOT__ResultSrcE;
-        CData/*1:0*/ rv32i__DOT__rv__DOT__c__DOT__ResultSrcM;
         CData/*0:0*/ rv32i__DOT__rv__DOT__c__DOT__JumpE;
         CData/*0:0*/ rv32i__DOT__rv__DOT__c__DOT__BranchE;
         CData/*0:0*/ rv32i__DOT__rv__DOT__c__DOT__jarlE;
@@ -53,6 +53,8 @@ class alignas(VL_CACHE_LINE_BYTES) Vrv32i___024root final : public VerilatedModu
         CData/*0:0*/ rv32i__DOT__rv__DOT__c__DOT__loadM;
         CData/*0:0*/ rv32i__DOT__rv__DOT__c__DOT__branchScr;
         CData/*0:0*/ rv32i__DOT__rv__DOT__c__DOT__ad__DOT__RtypeSub;
+        CData/*2:0*/ rv32i__DOT__rv__DOT__dp__DOT__fun3M;
+        CData/*2:0*/ rv32i__DOT__rv__DOT__dp__DOT__fun3W;
         CData/*0:0*/ rv32i__DOT__rv__DOT__hu__DOT__lwStall;
         CData/*6:0*/ __Vtableidx1;
         CData/*4:0*/ __Vtableidx2;
@@ -69,7 +71,6 @@ class alignas(VL_CACHE_LINE_BYTES) Vrv32i___024root final : public VerilatedModu
         IData/*31:0*/ rv32i__DOT__PC;
         IData/*31:0*/ rv32i__DOT__Instr;
         IData/*31:0*/ rv32i__DOT__ReadData;
-        IData/*31:0*/ rv32i__DOT__mask;
         IData/*31:0*/ rv32i__DOT__rv__DOT__InstrD;
         IData/*31:0*/ rv32i__DOT__rv__DOT__dp__DOT__PCFNext;
         IData/*31:0*/ rv32i__DOT__rv__DOT__dp__DOT__PCTargetE;
@@ -79,9 +80,9 @@ class alignas(VL_CACHE_LINE_BYTES) Vrv32i___024root final : public VerilatedModu
         IData/*31:0*/ rv32i__DOT__rv__DOT__dp__DOT__PCPlus4D;
         IData/*31:0*/ rv32i__DOT__rv__DOT__dp__DOT__PCE;
         IData/*31:0*/ rv32i__DOT__rv__DOT__dp__DOT__PCPlus4E;
-        IData/*31:0*/ rv32i__DOT__rv__DOT__dp__DOT__PCPlus4M;
     };
     struct {
+        IData/*31:0*/ rv32i__DOT__rv__DOT__dp__DOT__PCPlus4M;
         IData/*31:0*/ rv32i__DOT__rv__DOT__dp__DOT__PCPlus4W;
         IData/*31:0*/ rv32i__DOT__rv__DOT__dp__DOT__ImmExtD;
         IData/*31:0*/ rv32i__DOT__rv__DOT__dp__DOT__ImmExtE;

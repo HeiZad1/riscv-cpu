@@ -68,12 +68,20 @@ static int cmd_q(char *args) {
 
 static int cmd_si(char *args) {
   uint64_t nb_ex;
+  //uint64_t cnt=0;
   if (sscanf(args," %ld",&nb_ex)==1){
+    
     cpu_exec(nb_ex);
     #ifdef difftest1
+    if(bufferPC[2] == "00000000"){
+      cpu_exec(2);
+    }
+    
     difftest(nb_ex);
     #endif
     return 0;
+    
+    
   }
   else {
     nb_ex = 1;
@@ -110,7 +118,7 @@ static int cmd_x(char *args){
   __uint32_t addr_mem;
   if (sscanf(args," %d %x",&nb_mem,&addr_mem)==2){
     for(int i=0;i<nb_mem;i++){
-      printf("%x\n",read_dmem(addr_mem));//len 是4不是32
+      printf("addr:%x ,data:%x\n",addr_mem,read_dmem(addr_mem));//len 是4不是32
       addr_mem = addr_mem +4;
     }
     return 0;
@@ -193,7 +201,7 @@ static int cmd_help(char *args) {
     /* no argument given */
     for (i = 0; i < NR_CMD; i ++) {
       printf("%s - %s\n", cmd_table[i].name, cmd_table[i].description);
-    }
+    } 
   }
   else {
     for (i = 0; i < NR_CMD; i ++) {

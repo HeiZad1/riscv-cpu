@@ -6,8 +6,9 @@ module controller(
     input              [   2: 0]        funct3                     ,
     input                               funct7b5                   ,
     input                               ZeroE,l                    ,
-    output                              ResultSrcE0                ,
+    output             [   1: 0]        ResultSrcE                 ,
     output             [   1: 0]        ResultSrcW                 ,
+    output             [   1: 0]        ResultSrcM                 ,
     output                              MemWriteM                  ,
     output                              PCSrcE, ALUSrcE,loadW,jarlW,//XINJIADE
     output                              RegWriteW, RegWriteM ,//?????
@@ -18,8 +19,8 @@ module controller(
 
     wire               [   1: 0]        ALUOp                      ;
     wire               [   1: 0]        ResultSrcD                 ;
-    wire               [   1: 0]        ResultSrcE                 ;
-    wire               [   1: 0]        ResultSrcM                 ;
+    //wire               [   1: 0]        ResultSrcE                 ;
+    //wire               [   1: 0]        ResultSrcM                 ;
     wire                                BranchD                    ;
     wire                                JumpD                      ;
     wire                                JumpE                      ;
@@ -78,7 +79,7 @@ module controller(
   
 
     assign                              PCSrcE                    = (BranchE & branchScr) | JumpE;
-    assign                              ResultSrcE0               = ResultSrcE[0];
+    //assign                              ResultSrcE0               = ResultSrcE[0];
 endmodule
 
 	

@@ -115,17 +115,17 @@
      load_imem(img_file);
      //initialize_imem("riscvtest.txt");
      top->clk = 0;
-     top->reset = 0;
+     top->reset = 1;
      int reset_cycles = 10; 
-     if (reset_cycles > 0) {
+     while (reset_cycles > 0) {
         top->clk = !top->clk;
         top->eval();
         contextp->timeInc(1);
         tfp->dump(contextp->time()); 
         reset_cycles--;
-        } else {
-            top->reset = 1;  // 结束复位
-        }
+        } 
+            top->reset = 0;  // 结束复位
+        
         top->eval();
     // 仿真主循环
     //init_nemu_mem();

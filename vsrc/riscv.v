@@ -19,12 +19,12 @@ module riscv(	   input        		 clk, reset,
   wire		 			  stallF;
   wire		 			  FlushD;
   wire		 			  FlushE;
-  wire		 			  ResultSrcE0;
+  wire [1:0]	 	      ResultSrcE;
   wire		 			  loadW;
   wire		 			  less;
   wire		 			  jarlW;
   wire					  PCSrcE;
-  wire [1:0] 			  ResultSrcW;
+  wire [1:0] 			  ResultSrcW,ResultSrcM;
   wire [2:0] 			  ImmSrcD;//！！
   wire [3:0] 			  ALUControlE;
   wire [1:0] 			  SDypeSecM;//!!
@@ -45,8 +45,8 @@ module riscv(	   input        		 clk, reset,
   //assign                  DataAdrR=ALUResultM[7:2];
 
 
-  controller c(clk,reset,InstrD[6:0], InstrD[14:12], InstrD[30], Zero,less,ResultSrcE0,
-               ResultSrcW, MemWrite, PCSrcE,
+  controller c(clk,reset,InstrD[6:0], InstrD[14:12], InstrD[30], Zero,less,ResultSrcE,
+               ResultSrcW, ResultSrcM,MemWrite, PCSrcE,
                ALUSrcE, loadW,jarlW,RegWriteW, RegWriteM,
                ImmSrcD, ALUControlE,SDypeSecM,FlushE);
   datapath dp(clk, reset, ResultSrcW, PCSrcE,
@@ -60,7 +60,7 @@ module riscv(	   input        		 clk, reset,
 			  );
 			  
   HazardUnit hu(RegWriteW,RegWriteM,RdW,RdM,RdE,
-			    ResultSrcE0,PCSrcE,  
+			    ResultSrcE,ResultSrcM,PCSrcE,  
 			    Rs1E,Rs2E,Rs1D,Rs2D,
 			    ForWordAE,ForWordBE,
 				FlushE,FlushD,stallF,stallD

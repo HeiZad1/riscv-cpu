@@ -9,11 +9,11 @@ module sDypedec(
      case(funct3)
         
                // Sw 
-        3'b000:   SDypeSec = 2'b00;
+        3'b010:   SDypeSec = 2'b00;
                // Sh
         3'b001:   SDypeSec = 2'b01;
                // Sb
-        3'b010:   SDypeSec = 2'b10;
+        3'b000:   SDypeSec = 2'b10;
 			   
         
       default: SDypeSec = 2'bxx;                                    // undefined

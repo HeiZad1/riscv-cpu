@@ -163,32 +163,37 @@ module datapath(input                  clk,
     wire               [`XLEN-1: 0]     ReadDataW                  ;
     wire               [`XLEN-1: 0]     writeReg                   ;
     wire                [1:0]           offset                      ;
+    wire                [2:0]            fun3D                     ;
+    wire                [2:0]            fun3E                     ;
+    wire                [2:0]            fun3M                     ;
+    wire                [2:0]            fun3W                     ;
 
     assign                              Rs1D                      = InstrD[19:15];
     assign                              Rs2D                      = InstrD[24:20];
     assign                              RdD                       = InstrD[11: 7];
     assign                              offset                    = ALUResultM[1:0];
+    assign                              fun3D                     = InstrD[14:12];
     import "DPI-C" function void itrace(input int PCF, input int PCD,input int PCE,input int INF,input int IND);
     import "DPI-C" function void handle_ebreak();
   // next PC logic
-  enflopr #(`XLEN)  pcreg(clk, reset, ~stallF,PCFNext, PCF);
+  floprPC #(`XLEN)  pcreg(clk, reset, ~stallF,PCFNext, PCF);
   adder             pcadd4(PCF, 32'd4, PCPlus4F);
   adder             pcaddbranch(PCE, ImmExtE, PCTargetE);
   mux2 #(`XLEN)        pcmux (PCPlus4F,PCJamp , PCSrc, PCFNext);
-  mux2 #(`XLEN)        pcmux2(ALUResultW, PCTargetE, jarlW,PCJamp );
+  mux2 #(`XLEN)        pcmux2( PCTargetE,ALUResultW, jarlW,PCJamp );
  
   // register file logic
   regfile     rff(~clk, RegWrite, InstrD[19:15], InstrD[24:20], 
                  RdW, writeReg,RD1D ,RD2D );
   extend      ext(InstrD[31:7], ImmSrc, ImmExtD);
  // mux2 #(`XLEN)    fwdmux(RD2, ResultW,ForWordD , RD2D);
-  lmemControl lc(ResultW,InstrD[14:12],loadW,writeReg);
+  lmemControl lc(ResultW,fun3W,loadW,writeReg);
   WmemControl wc(WriteDataM,SDypeSecM,offset,mask,WriteData);
   
   
 
   // ALU logic
-  mux3 #(`XLEN)  srcAmux(RD1E, ResultW , ALUResultM, ForWordAE, SrcAE);
+  mux4 #(`XLEN)  srcAmux(RD1E, ResultW , ALUResultM, PCTargetM,ForWordAE, SrcAE);
   mux3 #(`XLEN)  srcBmux(RD2E, ResultW, ALUResultM, ForWordBE, WriteDataE);
   mux2 #(`XLEN)  srcbmux(WriteDataE, ImmExtE, ALUSrc, SrcBE);
   alu              alu(SrcAE, SrcBE, ALUControl, ALUResult, Zero,l);//ALUResult输出端口
@@ -196,8 +201,9 @@ module datapath(input                  clk,
   
   // regD
     enfloprsind #(`XLEN) Dreg1(clk, 1'b0 ,FlushD, ~stallD,Instr, InstrD);
-    enfloprs #(`XLEN)    Dreg2(clk,  reset,FlushD , ~stallD,PCF, PCD);
+    enfloprspc4 #(`XLEN)    Dreg2(clk,  reset,FlushD , ~stallD,PCF, PCD);
     enfloprspc4 #(`XLEN) Dreg3(clk, 1'b0 ,FlushD, ~stallD,PCPlus4F, PCPlus4D);
+    
 	
 	//regE
     floprs #(`XLEN) Ereg1(clk, reset, FlushE, PCD, PCE);
@@ -208,6 +214,7 @@ module datapath(input                  clk,
     floprs #(`XLEN) Ereg6(clk,  reset, FlushE, PCPlus4D, PCPlus4E);
     floprs #(`XLEN) Ereg7(clk,  reset, FlushE, RD2D , RD2E);
     floprs #(`XLEN) Ereg8(clk,  reset, FlushE, RD1D, RD1E);
+    floprs #(3)     Ereg_FUN3(clk,  reset, FlushE, fun3D, fun3E);
 	
 	//regM
     flopr #(`XLEN) Mreg1 (clk, reset , ALUResult, ALUResultM);
@@ -215,6 +222,7 @@ module datapath(input                  clk,
     flopr #( `RFIDX_WIDTH) Mreg3 (clk, reset , RdE, RdM);
     flopr #(`XLEN) Mreg4 (clk, reset , PCPlus4E, PCPlus4M);
 	flopr #(`XLEN) Mreg11(clk, reset , PCTargetE, PCTargetM);
+    flopr #(3)     Mreg_FUN3(clk, reset , fun3E, fun3M);
 	
 	//RegW
     flopr #(`XLEN) Wreg1(clk, reset , ALUResultM, ALUResultW);
@@ -222,6 +230,7 @@ module datapath(input                  clk,
     flopr #( `RFIDX_WIDTH) Wreg3(clk, reset , RdM, RdW);
     flopr #(`XLEN) Wreg4(clk, reset , PCPlus4M, PCPlus4W);
 	flopr #(`XLEN) Wreg9(clk, reset , PCTargetM, PCTargetW);
+    flopr #(3) Wreg_FUN3(clk, reset , fun3M, fun3W);
 	
 	//RES
     mux4 #(`XLEN)  resultmux(ALUResultW, ReadDataW, PCPlus4W,PCTargetW, ResultSrc, ResultW);

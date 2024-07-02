@@ -234,17 +234,13 @@ module datapath(input                  clk,
 	
 	//RES
     mux4 #(`XLEN)  resultmux(ALUResultW, ReadDataW, PCPlus4W,PCTargetW, ResultSrc, ResultW);
-	always@(*) begin
-    if (reset) begin
-            // 复位逻辑
-        end else begin
-            if (InstrD == 32'h100073) begin // 检测到 ebreak 指令
-                handle_ebreak();
-            end
-        end
-        end
+    
+	
+    
+        
     always@(posedge clk) begin
         itrace(PCF,PCD,PCE,Instr,InstrD);
+        handle_ebreak();
     end
 endmodule
 

@@ -8,7 +8,7 @@ module dmem(input          clk, we,
 
 
   import "DPI-C" function int read_dmem(input int addr);
-  import "DPI-C" function void write_dmem(input int addr, input int data);
+  import "DPI-C" function void write_imem(input int addr, input int data);
 
   //assign rd = RAM[a[31:2]]; // word aligned
     assign rd =  read_dmem(a);
@@ -17,7 +17,7 @@ module dmem(input          clk, we,
     //if (we) write_dmem(addr, wdata);
     int masked_data;
       masked_data =  (wd & write_mask);
-      if (we) write_dmem(a, masked_data);
+      if (we) write_imem(a, masked_data);
   end
 endmodule
 

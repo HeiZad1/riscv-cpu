@@ -106,10 +106,9 @@ VL_ATTR_COLD void Vrv32i___024root___eval_stl(Vrv32i___024root* vlSelf) {
     }
 }
 
-void Vrv32i___024root____Vdpiimwrap_rv32i__DOT__rv__DOT__dp__DOT__handle_ebreak_TOP();
 void Vrv32i___024root____Vdpiimwrap_rv32i__DOT__imem__DOT__read_imem_TOP(IData/*31:0*/ addr, IData/*31:0*/ &read_imem__Vfuncrtn);
 void Vrv32i___024root____Vdpiimwrap_rv32i__DOT__dmem__DOT__read_dmem_TOP(IData/*31:0*/ addr, IData/*31:0*/ &read_dmem__Vfuncrtn);
-extern const VlUnpacked<SData/*13:0*/, 128> Vrv32i__ConstPool__TABLE_h5f27bdaa_0;
+extern const VlUnpacked<SData/*13:0*/, 128> Vrv32i__ConstPool__TABLE_hee466112_0;
 extern const VlUnpacked<CData/*0:0*/, 32> Vrv32i__ConstPool__TABLE_ha204d35e_0;
 
 VL_ATTR_COLD void Vrv32i___024root___stl_sequent__TOP__0(Vrv32i___024root* vlSelf) {
@@ -117,11 +116,6 @@ VL_ATTR_COLD void Vrv32i___024root___stl_sequent__TOP__0(Vrv32i___024root* vlSel
     Vrv32i__Syms* const __restrict vlSymsp VL_ATTR_UNUSED = vlSelf->vlSymsp;
     VL_DEBUG_IF(VL_DBG_MSGF("+    Vrv32i___024root___stl_sequent__TOP__0\n"); );
     // Body
-    if ((1U & (~ (IData)(vlSelf->reset)))) {
-        if ((0x100073U == vlSelf->rv32i__DOT__rv__DOT__InstrD)) {
-            Vrv32i___024root____Vdpiimwrap_rv32i__DOT__rv__DOT__dp__DOT__handle_ebreak_TOP();
-        }
-    }
     vlSelf->WriteData = ((0U == (IData)(vlSelf->rv32i__DOT__rv__DOT__SDypeSecM))
                           ? vlSelf->rv32i__DOT__rv__DOT__dp__DOT__WriteDataM
                           : ((1U == (IData)(vlSelf->rv32i__DOT__rv__DOT__SDypeSecM))
@@ -147,7 +141,7 @@ VL_ATTR_COLD void Vrv32i___024root___stl_sequent__TOP__0(Vrv32i___024root* vlSel
            + vlSelf->rv32i__DOT__rv__DOT__dp__DOT__PCE);
     vlSelf->__Vtableidx1 = (0x7fU & vlSelf->rv32i__DOT__rv__DOT__InstrD);
     vlSelf->rv32i__DOT__rv__DOT__c__DOT__md__DOT__controls 
-        = Vrv32i__ConstPool__TABLE_h5f27bdaa_0[vlSelf->__Vtableidx1];
+        = Vrv32i__ConstPool__TABLE_hee466112_0[vlSelf->__Vtableidx1];
     vlSelf->rv32i__DOT__rv__DOT__ForWordAE = ((((((IData)(vlSelf->rv32i__DOT__rv__DOT__Rs1E) 
                                                   == (IData)(vlSelf->rv32i__DOT__rv__DOT__RdM)) 
                                                  & (IData)(vlSelf->rv32i__DOT__rv__DOT__RegWriteM)) 
@@ -158,18 +152,18 @@ VL_ATTR_COLD void Vrv32i___024root___stl_sequent__TOP__0(Vrv32i___024root* vlSel
                                                ? 3U
                                                : ((
                                                    (((IData)(vlSelf->rv32i__DOT__rv__DOT__Rs1E) 
-                                                     == (IData)(vlSelf->rv32i__DOT__rv__DOT__RdW)) 
-                                                    & (IData)(vlSelf->rv32i__DOT__rv__DOT__RegWriteW)) 
+                                                     == (IData)(vlSelf->rv32i__DOT__rv__DOT__RdM)) 
+                                                    & (IData)(vlSelf->rv32i__DOT__rv__DOT__RegWriteM)) 
                                                    & (0U 
                                                       != (IData)(vlSelf->rv32i__DOT__rv__DOT__Rs1E)))
-                                                   ? 1U
+                                                   ? 2U
                                                    : 
                                                   (((((IData)(vlSelf->rv32i__DOT__rv__DOT__Rs1E) 
-                                                      == (IData)(vlSelf->rv32i__DOT__rv__DOT__RdM)) 
-                                                     & (IData)(vlSelf->rv32i__DOT__rv__DOT__RegWriteM)) 
+                                                      == (IData)(vlSelf->rv32i__DOT__rv__DOT__RdW)) 
+                                                     & (IData)(vlSelf->rv32i__DOT__rv__DOT__RegWriteW)) 
                                                     & (0U 
                                                        != (IData)(vlSelf->rv32i__DOT__rv__DOT__Rs1E)))
-                                                    ? 2U
+                                                    ? 1U
                                                     : 0U)));
     vlSelf->rv32i__DOT__rv__DOT__ForWordBE = (((((IData)(vlSelf->rv32i__DOT__rv__DOT__Rs2E) 
                                                  == (IData)(vlSelf->rv32i__DOT__rv__DOT__RdM)) 
@@ -368,7 +362,8 @@ VL_ATTR_COLD void Vrv32i___024root___stl_sequent__TOP__0(Vrv32i___024root* vlSel
         = Vrv32i__ConstPool__TABLE_ha204d35e_0[vlSelf->__Vtableidx2];
     vlSelf->rv32i__DOT__rv__DOT__PCSrcE = (((IData)(vlSelf->rv32i__DOT__rv__DOT__c__DOT__BranchE) 
                                             & (IData)(vlSelf->rv32i__DOT__rv__DOT__c__DOT__branchScr)) 
-                                           | (IData)(vlSelf->rv32i__DOT__rv__DOT__c__DOT__JumpE));
+                                           | ((IData)(vlSelf->rv32i__DOT__rv__DOT__c__DOT__JumpE) 
+                                              | (IData)(vlSelf->rv32i__DOT__rv__DOT__jarlW)));
     vlSelf->rv32i__DOT__rv__DOT__dp__DOT__PCFNext = 
         ((IData)(vlSelf->rv32i__DOT__rv__DOT__PCSrcE)
           ? ((IData)(vlSelf->rv32i__DOT__rv__DOT__jarlW)
@@ -403,21 +398,6 @@ VL_ATTR_COLD bool Vrv32i___024root___eval_phase__stl(Vrv32i___024root* vlSelf) {
     }
     return (__VstlExecute);
 }
-
-#ifdef VL_DEBUG
-VL_ATTR_COLD void Vrv32i___024root___dump_triggers__ico(Vrv32i___024root* vlSelf) {
-    (void)vlSelf;  // Prevent unused variable warning
-    Vrv32i__Syms* const __restrict vlSymsp VL_ATTR_UNUSED = vlSelf->vlSymsp;
-    VL_DEBUG_IF(VL_DBG_MSGF("+    Vrv32i___024root___dump_triggers__ico\n"); );
-    // Body
-    if ((1U & (~ vlSelf->__VicoTriggered.any()))) {
-        VL_DBG_MSGF("         No triggers active\n");
-    }
-    if ((1ULL & vlSelf->__VicoTriggered.word(0U))) {
-        VL_DBG_MSGF("         'ico' region trigger index 0 is active: Internal 'ico' trigger - first iteration\n");
-    }
-}
-#endif  // VL_DEBUG
 
 #ifdef VL_DEBUG
 VL_ATTR_COLD void Vrv32i___024root___dump_triggers__act(Vrv32i___024root* vlSelf) {

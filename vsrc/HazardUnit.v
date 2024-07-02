@@ -17,11 +17,12 @@ module HazardUnit(
 	if  (((rs1e == rdm) & RegWriteM ) & (rs1e != 0) & (ResultSrcM == 2'b11)) 
 		forwardae = 2'b11;
 	else if
-		(((rs1e == rdw) & RegWriteW) & (rs1e != 0)) 
-		forwardae = 2'b01;
-	else if
 		(((rs1e == rdm) & RegWriteM  ) & (rs1e != 0)) 
 		forwardae = 2'b10;
+	else if
+		(((rs1e == rdw) & RegWriteW) & (rs1e != 0)) 
+		forwardae = 2'b01;
+	
 	else 
 		forwardae = 2'b00;
 	

@@ -25,7 +25,7 @@ extern "C" {
     // DPI import at vsrc/imem.v:5:31
     extern int read_imem(int addr);
     // DPI import at vsrc/dmem.v:11:32
-    extern void write_dmem(int addr, int data);
+    extern void write_imem(int addr, int data);
 
 #ifdef __cplusplus
 }

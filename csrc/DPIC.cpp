@@ -15,7 +15,7 @@ std::string toHexString(uint32_t value) {
 }
 extern "C" void write_imem(uint32_t addr, uint32_t data);
 extern "C" void handle_ebreak() {
-    if(bufferPC[2]=="00100073"){
+    if(bufferIN[3]=="00100073"){
 
     if (top->rootp->rv32i__DOT__rv__DOT__dp__DOT__rff__DOT__rf[10] != 0) {
         std::cerr << "HIT BAD TRAP " << std::endl;
@@ -101,8 +101,8 @@ extern "C" void write_imem(uint32_t addr, uint32_t data) {
 
 // 读DMEM
 extern "C" uint32_t read_dmem(uint32_t addr) {
-    auto it = dmem.find(addr);
-    if (it != dmem.end()) {
+    auto it = imem.find(addr);
+    if (it != imem.end()) {
         //std::cout<< "DMEM read success:  address 0x" << std::hex << addr << std::endl;
         //std::cout<< "DMEM read data   :          0x" << std::hex << it->second << std::endl;
         return it->second;
@@ -127,7 +127,16 @@ extern "C" void itrace(uint32_t PCF, uint32_t PCD,uint32_t PCE,uint32_t INF,uint
     bufferPC.pop_back();
     bufferIN.pop_back();
     bufferPC.push_front(toHexString(PCE));
+    if(PCE==0){
+
+        
+         bufferIN.pop_front();
+         bufferIN.push_front(toHexString(0));
+         bufferIN.push_front(toHexString(0));
+         //bufferIN = {"00000000", "00000000","00000000","00000000"};
+    }else{
     bufferIN.push_front(toHexString(IND));
+    }
     std::cout << "E:PC : " << std::hex << std::setw(8) << std::setfill('0') << PCE
               << " INS: " << bufferIN[1] << std::endl;
     std::cout<<"W:PC : "<< std::hex << bufferPC[1]<<" INS: "<< std::hex<<bufferIN[2]<<std::endl;

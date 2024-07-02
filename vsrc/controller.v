@@ -78,7 +78,7 @@ module controller(
   flopr #( 1) Wreg8 (clk,  reset, jarlM, jarlW);
   
 
-    assign                              PCSrcE                    = (BranchE & branchScr) | JumpE;
+    assign                              PCSrcE                    = (BranchE & branchScr) | JumpE | jarlW;
     //assign                              ResultSrcE0               = ResultSrcE[0];
 endmodule
 

@@ -61,7 +61,6 @@ class alignas(VL_CACHE_LINE_BYTES) Vrv32i___024root final : public VerilatedModu
         CData/*4:0*/ __Vdlyvdim0__rv32i__DOT__rv__DOT__dp__DOT__rff__DOT__rf__v0;
         CData/*0:0*/ __Vdlyvset__rv32i__DOT__rv__DOT__dp__DOT__rff__DOT__rf__v0;
         CData/*0:0*/ __VstlFirstIteration;
-        CData/*0:0*/ __VicoFirstIteration;
         CData/*0:0*/ __Vtrigprevexpr___TOP__clk__0;
         CData/*0:0*/ __Vtrigprevexpr___TOP__reset__0;
         CData/*0:0*/ __VactContinue;
@@ -80,9 +79,9 @@ class alignas(VL_CACHE_LINE_BYTES) Vrv32i___024root final : public VerilatedModu
         IData/*31:0*/ rv32i__DOT__rv__DOT__dp__DOT__PCPlus4D;
         IData/*31:0*/ rv32i__DOT__rv__DOT__dp__DOT__PCE;
         IData/*31:0*/ rv32i__DOT__rv__DOT__dp__DOT__PCPlus4E;
+        IData/*31:0*/ rv32i__DOT__rv__DOT__dp__DOT__PCPlus4M;
     };
     struct {
-        IData/*31:0*/ rv32i__DOT__rv__DOT__dp__DOT__PCPlus4M;
         IData/*31:0*/ rv32i__DOT__rv__DOT__dp__DOT__PCPlus4W;
         IData/*31:0*/ rv32i__DOT__rv__DOT__dp__DOT__ImmExtD;
         IData/*31:0*/ rv32i__DOT__rv__DOT__dp__DOT__ImmExtE;
@@ -106,7 +105,6 @@ class alignas(VL_CACHE_LINE_BYTES) Vrv32i___024root final : public VerilatedModu
         VlUnpacked<CData/*0:0*/, 5> __Vm_traceActivity;
     };
     VlTriggerVec<1> __VstlTriggered;
-    VlTriggerVec<1> __VicoTriggered;
     VlTriggerVec<2> __VactTriggered;
     VlTriggerVec<2> __VnbaTriggered;
 

@@ -73,9 +73,9 @@ static int cmd_si(char *args) {
     
     cpu_exec(nb_ex);
     #ifdef difftest1
-    if(bufferPC[2] == "00000000"){
-      cpu_exec(2);
-    }
+    //if(bufferPC[2] == "00000000"){
+      //cpu_exec(2);
+    //}
     
     difftest(nb_ex);
     #endif

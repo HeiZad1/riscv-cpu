@@ -29,11 +29,12 @@
     
     extern "C" void initialize_imem(const char* filename);
     extern "C" void handle_ebreak();
-    extern "C" void write_imem(uint32_t addr, uint32_t data);
+    //extern "C" void write_imem(uint32_t addr, uint32_t data);
      void load_imem(const char* filename);
     
 
-
+    std::deque<bool> bufferStall = {0,0,0,0};
+    std::deque<bool> bufferJamp = {0,0,0,0,0};
 
     
 
@@ -86,6 +87,18 @@
         top->eval();
         tfp->dump(contextp->time());
         contextp->timeInc(1);
+
+        bufferStall.pop_back();
+        bufferJamp.pop_back();
+        bufferStall.push_front(top->rootp->rv32i__DOT__rv__DOT__hu__DOT__lwStall);
+        bufferJamp.push_front(top->rootp->rv32i__DOT__rv__DOT__PCSrcE);
+
+        if(bufferJamp[4])
+          //std::cout<<bufferJamp[2]<<std::endl;
+          n+=2;
+        if(bufferStall[3])
+         //std::cout<<bufferStall[1]<<std::endl;
+          n+=1;
         }
 
         

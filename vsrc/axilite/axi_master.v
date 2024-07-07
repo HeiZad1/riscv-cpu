@@ -11,12 +11,12 @@ module axi_master(
         output   reg [31:0]         ARADDR,
         //input   [:0]         ARCACHE,
         output    reg              ARVALID,
-        output                  ARPROT,
+        //output                  ARPROT,
         input                   ARREADY,
 
         //read data channel
         input   [31:0]         RDATA, //Read Data (32-bit only).
-        input   [ 1:0]         RRESP,
+        //input   [ 1:0]         RRESP,
         input                  RVALID,
         output                 RREADY,
 
@@ -30,12 +30,12 @@ module axi_master(
 
         //write data channel
         output reg [31:0]         WDATA,
-        output reg [ 3:0]         WSTRB,  //mask
+        //output reg [ 3:0]         WSTRB,  //mask
         output  reg                WVALID,
         output   reg               WREADY,
 
         //Write Response Channel
-        input   [ 1:0]         BRESP,
+        //input   [ 1:0]         BRESP,
         input                  BVALID,
         output   reg              BREADY
    );
@@ -45,14 +45,16 @@ module axi_master(
         //reg                     r_ARREADY;
         reg                     r_ARVALID;
         reg     [31:0]          r_WDATA;
+        reg     [31:0]          r_RDATA;
         //reg                     r_RVALID;
-        reg                     r_AWADDR;
+        reg     [31:0]          r_AWADDR;
         reg                     r_AWVALID;
-        reg     [ 3:0]          r_WSTRB;
-        reg                     r_ARADDR;
+        //reg     [ 3:0]          r_WSTRB;
+        reg     [31:0]          r_ARADDR;
         reg                     r_BREADY;
         reg                     r_WVALID;
         reg                     r_WREADY;
+        reg                     r_RREADY;
 
 
         //assign                 ARREADY = r_ARREADY;
@@ -61,18 +63,18 @@ module axi_master(
         assign                 read_data = r_RDATA;
         //assign                 RVALID = r_RVALID;
         assign                 RREADY = r_RREADY;
-        assign                  ARADDR=   r_ARADDR;
-        assign                  RVALID=   r_RVALID;
+        assign                 ARADDR=   r_ARADDR;
+        //assign                  RVALID=   r_RVALID;
         assign                  AWADDR=   r_AWADDR;
         assign                   AWVALID=  r_AWVALID;
-        assign                    WSTRB= r_WSTRB;
+        //assign                    WSTRB= r_WSTRB;
         assign                    BREADY= r_BREADY;
         assign                     WVALID = r_WVALID;
         assign                     WREADY = r_WREADY;
 
     
     //gen ARVALID
-    always (posedge ACLK) begin
+    always@(posedge ACLK) begin
         if(ARESETN) begin
             r_ARVALID <= 1'b0;
             r_ARADDR  <= 32'b0;
@@ -92,7 +94,7 @@ module axi_master(
 
 
         //logic addr shake hand
-    always (posedge ACLK) begin
+    always@(posedge ACLK) begin
         if(ARESETN) 
             r_ARVALID <= 1'b0;
         else if(ARREADY & r_ARVALID)
@@ -101,7 +103,7 @@ module axi_master(
             r_ARVALID <= r_ARVALID;
     end
 
-    always (posedge ACLK) begin
+    always@(posedge ACLK) begin
         if(ARESETN) 
             r_RREADY <= 1'b0;
         else if(r_RREADY & RVALID)
@@ -111,7 +113,7 @@ module axi_master(
             r_RREADY <= r_RREADY;   //??
     end  
 
-     always (posedge ACLK) begin
+     always@(posedge ACLK) begin
         if(ARESETN ) begin
                 r_RREADY <= 1'b0;
                 r_RDATA  <= 32'b0;
@@ -124,10 +126,10 @@ module axi_master(
         end
     end
     
-     always (posedge ACLK) begin
+     always@(posedge ACLK) begin
         if(ARESETN) 
             r_RREADY <= 1'b0;
-        else if(r_RREADY & ARVALID)
+        else if(r_RREADY & RVALID)
             r_RREADY <= 1'b0;
         else
             r_RREADY <= r_RREADY;   //??
@@ -138,7 +140,7 @@ module axi_master(
 
 
     //write logic
-    always (posedge ACLK) begin
+    always@(posedge ACLK) begin
         if(ARESETN) begin
             r_WDATA  <=32'b0;
             r_AWADDR  <= 32'b0;
@@ -160,7 +162,7 @@ module axi_master(
         end
     end
 
-    always (posedge ACLK) begin
+    always@(posedge ACLK) begin
         if(ARESETN) begin
             r_WVALID <= 1'b0;
             r_AWVALID<= 1'b0;
@@ -174,7 +176,7 @@ module axi_master(
     end
     
 
-    always (posedge ACLK) begin
+    always@(posedge ACLK) begin
         if(ARESETN) begin
             r_BREADY <= 1'b0;
                     end

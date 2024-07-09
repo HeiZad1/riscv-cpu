@@ -5,7 +5,7 @@
 VERILATOR_ROOT ?= $(shell verilator --getenv VERILATOR_ROOT)
 
 # Verilog and C++ source files
-VSRCS = axi_master.v axi_slaver.v axiTop.v
+VSRCS = axi_master.v axi_slaver.v axiTop.v mux4.v
 CXX_SRCS = testAxi.cpp
 
 # Top-level module
@@ -35,6 +35,7 @@ $(TOP_MODULE): $(OBJ_DIR)/V$(TOP_MODULE).mk
 # Run the simulation
 run: $(TOP_MODULE)
 	./$(OBJ_DIR)/V$(TOP_MODULE)
+	gtkwave ./waveform.vcd
 
 # Clean up generated files
 clean:

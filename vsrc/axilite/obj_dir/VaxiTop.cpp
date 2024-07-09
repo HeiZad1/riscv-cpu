@@ -14,7 +14,6 @@ VaxiTop::VaxiTop(VerilatedContext* _vcontextp__, const char* _vcname__)
     , rst{vlSymsp->TOP.rst}
     , wen{vlSymsp->TOP.wen}
     , ren{vlSymsp->TOP.ren}
-    , __pinNumber11{vlSymsp->TOP.__pinNumber11}
     , read_data_m{vlSymsp->TOP.read_data_m}
     , addr_m{vlSymsp->TOP.addr_m}
     , write_data_m{vlSymsp->TOP.write_data_m}

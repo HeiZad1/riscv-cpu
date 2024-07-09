@@ -1,4 +1,4 @@
-#include "Vaxi_slaver.h"
+#include "VaxiTop.h"
 #include "verilated.h"
 #include "verilated_vcd_c.h"
 #include <iostream>
@@ -7,33 +7,33 @@
 
 int main(int argc, char **argv, char **env) {
     Verilated::commandArgs(argc, argv);
-    Vaxi_slaver* top = new Vaxi_slaver;
+    VaxiTop* top = new VaxiTop;
 
     Verilated::traceEverOn(true);
     VerilatedVcdC* tfp = new VerilatedVcdC;
     top->trace(tfp, 99);
     tfp->open("waveform.vcd");
 
-    top->ARESETN = 0;
-    top->ACLK = 0;
+    top->rst = 1;
+    top->clk = 0;
 
     for (int i = 0; i < SIM_TIME; i++) {
-        if (i > 2) top->ARESETN = 1;  // De-assert reset after some time
+        if (i > 2) top->rst = 0;  // De-assert reset after some time
 
         // Toggle clock
-        top->ACLK = !top->ACLK;
+        top->clk = !top->clk;
         top->eval();
 
         // Add test stimuli
-        top->ren = (i > 10 && i < 20);  // Example stimulus
-        top->ARADDR = (i > 10 && i < 20) ? 0x1234 : 0x0;
-
+        top->ren = (i > 10 && i < 50);  // Example stimulus
+        top->addr_m = (i > 10 && i < 50) ? 0x1234 : 0x0;
+        /*
         top->wen = (i > 30 && i < 40);
-        top->AWADDR = (i > 30 && i < 40) ? 0x5678 : 0x0;
+        top->addr_m = (i > 30 && i < 40) ? 0x5678 : 0x0;
 
-        top->WDATA = (i > 30 && i < 40) ? 0xABCD : 0x0;
+        top->write_data_m = (i > 30 && i < 40) ? 0xABCD : 0x0;
         //top->WVALID = (i > 30 && i < 40);
-
+        */
         // Evaluate the model
         top->eval();
         tfp->dump(i);

@@ -45,6 +45,7 @@ VM_USER_LDLIBS = \
 VM_USER_CLASSES = \
 	DPIC \
 	difftest \
+	rram \
 	sdb \
 	sim_main \
 
@@ -65,6 +66,8 @@ VPATH += $(VM_USER_DIR)
 DPIC.o: ./csrc/DPIC.cpp
 	$(OBJCACHE) $(CXX) $(CXXFLAGS) $(CPPFLAGS) $(OPT_FAST) -c -o $@ $<
 difftest.o: ./csrc/difftest.cpp
+	$(OBJCACHE) $(CXX) $(CXXFLAGS) $(CPPFLAGS) $(OPT_FAST) -c -o $@ $<
+rram.o: ./csrc/rram.cpp
 	$(OBJCACHE) $(CXX) $(CXXFLAGS) $(CPPFLAGS) $(OPT_FAST) -c -o $@ $<
 sdb.o: ./csrc/sdb.cpp
 	$(OBJCACHE) $(CXX) $(CXXFLAGS) $(CPPFLAGS) $(OPT_FAST) -c -o $@ $<

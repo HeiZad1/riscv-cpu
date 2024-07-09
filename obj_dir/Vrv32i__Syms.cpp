@@ -18,7 +18,7 @@ Vrv32i__Syms::Vrv32i__Syms(VerilatedContext* contextp, const char* namep, Vrv32i
     , TOP{this, namep}
 {
         // Check resources
-        Verilated::stackCheck(226);
+        Verilated::stackCheck(260);
     // Configure time unit / time precision
     _vm_contextp__->timeunit(-12);
     _vm_contextp__->timeprecision(-12);

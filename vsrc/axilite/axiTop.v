@@ -1,35 +1,40 @@
 module axiTop(
     input                           clk,
     input                           rst,
-    output   [31:0]                 read_data_m,
+    output   [31:0]                 write_data_s,
     input    [31:0]                 addr_m,
     input    [31:0]                 write_data_m,
     input                           wen,
     input                           ren,
+    output                          ren_s,
     //input    [31:0]                 mask, 
+    input   [31:0]                 read_data_s,
+    output  [31:0]                 read_data_m,
 
-    output   [31:0]                 read_data_s,
-    output   [31:0]                 addr_s,
-    output   [31:0]                 write_data_s,
+    output   [31:0]                 addr_s
 
 );
     wire         [31:0]             m2s_ARADDR;
     wire                            m2s_ARVALID;
     wire                            s2m_ARREADY;
     wire         [31:0]             s2m_RDATA;
+    //wire         [31:0]             write_data_s;
+    //wire         [31:0]             read_data_m;
     wire                            s2m_RVALID;
     wire                            m2s_RREADY;
     wire         [31:0]             m2s_AWADDR;
     wire                            m2s_AWVALID;
     wire                            s2m_AWREADY;
+    wire         [31:0]             addr_w;
+    wire         [31:0]             addr_r;
 
     wire         [31:0]             m2s_WDATA;
     wire                            m2s_WVALID;
     wire                            s2m_WREADY;
     //wire         [3:0]              s2m_BRESP;
-    //wire                            s2m_BVALID;
+    wire                            s2m_BVALID;
     wire                            m2s_BREADY;
-    wire        [ 3:0]              AWPROT;
+    //wire        [ 3:0]              AWPROT;
 
 
 
@@ -58,7 +63,7 @@ axi_master  cpu2axi(
 
         //write addr channel
     .AWADDR(m2s_AWADDR),
-    .AWPROT(AWPROT),
+    //.AWPROT(AWPROT),
     .AWVALID(m2s_AWVALID),
     .AWREADY(s2m_AWREADY),
 
@@ -82,9 +87,11 @@ axi_master  cpu2axi(
 axi_slaver  axi2mem(
     .ACLK(clk),
     .ARESETN(rst),
-    .addr(addr_s),
+    .addr(addr_r),
     .read_data(read_data_s),
     .write_data(write_data_s),
+    .addr_w(addr_w),
+    .ren(ren_s),
 
         //read addr channel
     .ARADDR(m2s_ARADDR),
@@ -102,7 +109,7 @@ axi_slaver  axi2mem(
 
         //write addr channel
     .AWADDR(m2s_AWADDR),
-    .AWPROT(AWPROT),
+    //.AWPROT(AWPROT),
     .AWVALID(m2s_AWVALID),
     .AWREADY(s2m_AWREADY),
 
@@ -118,6 +125,16 @@ axi_slaver  axi2mem(
     .BVALID(s2m_BVALID),
     .BREADY(m2s_BREADY)
    );
+/*
+   always@(*) begin
+    if(wen)
+        addr_s = addr_w;
+    if(ren)
+        addr_s = addr_r;
+   end
+*/
+   mux4#(32) mux_addr(32'b0,addr_w,addr_r,32'b0,{ren,wen},addr_s);
+   //mux4#(32) mux_data(32'b0,write_data_s,read_data_s,32'b0,{wen,ren},out_data);
 
 endmodule
 

@@ -13,7 +13,7 @@ NEMU_INCLUDE_DIR = ~/ysyx/ics2023/nemu/include
 CFLAGS = -fPIC 
 LDFLAGS = -lreadline -L$(NEMU_DIR) -Wl,-rpath=$(NEMU_DIR) -Wl,-rpath-link=$(NEMU_DIR) $(NEMU_DIR)/riscv32-nemu-interpreter-so  
 # Verilog源文件
-VERILOG_SRCS = $(wildcard $(VERILOG_DIR)/*.v)
+VERILOG_SRCS = $(wildcard $(VERILOG_DIR)/*.v) $(wildcard $(VERILOG_DIR)/axilite/*.v)
 CPP_SRCS = $(wildcard $(CPP_DIR)/*.cpp)
 
 # 生成的对象文件目录

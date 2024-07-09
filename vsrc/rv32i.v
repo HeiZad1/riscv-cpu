@@ -21,18 +21,25 @@ module rv32i(
     
     );                  
 
-    wire               [`XLEN-1: 0]     PC                         ;
-    wire               [`XLEN-1: 0]     Instr                      ;
+    wire               [`XLEN-1: 0]     PC_m                         ;
+    wire               [`XLEN-1: 0]     PC_s                         ;
+    wire               [`XLEN-1: 0]     Instr_s                    ;
+    wire               [`XLEN-1: 0]     Instr_m                    ;
     wire               [`XLEN-1: 0]     ReadData                   ;
     wire               [`XLEN-1: 0]     mask                       ;
+    /* verilator lint_off UNUSEDSIGNAL */
+    wire               [`XLEN-1: 0]     write_d;
+    wire                                re;
+    /* verilator lint_on UNUSEDSIGNAL */                       
     //wire               [`XLEN-1: 0]     index_instr                ;
 
     //assign                              index_instr = PC[7:2]       ;
   
   // instantiate processor and memories
-  riscv rv(clk, reset, PC, Instr, MemWrite, DataAdr,
+  riscv rv(clk, reset, PC_m, Instr_m, MemWrite, DataAdr,
                        WriteData, mask,ReadData);
-  imem imem(PC, Instr);
+  imem imem(clk,re,PC_s, Instr_s);
   dmem dmem(clk, MemWrite, DataAdr, WriteData, mask,ReadData);
+  axiTop axi(clk,reset,write_d,PC_m,32'b0,1'b0,1'b1,re,Instr_s,Instr_m,PC_s);
 endmodule
 

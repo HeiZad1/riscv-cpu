@@ -18,7 +18,7 @@ VaxiTop__Syms::VaxiTop__Syms(VerilatedContext* contextp, const char* namep, Vaxi
     , TOP{this, namep}
 {
         // Check resources
-        Verilated::stackCheck(64);
+        Verilated::stackCheck(77);
     // Configure time unit / time precision
     _vm_contextp__->timeunit(-12);
     _vm_contextp__->timeprecision(-12);

@@ -33,26 +33,27 @@ void VaxiTop___024root__trace_chg_0_sub_0(VaxiTop___024root* vlSelf, VerilatedVc
         bufp->chgIData(oldp+6,(vlSelf->axiTop__DOT__cpu2axi__DOT__r_AWADDR),32);
         bufp->chgBit(oldp+7,(vlSelf->axiTop__DOT__cpu2axi__DOT__r_AWVALID));
         bufp->chgBit(oldp+8,(vlSelf->axiTop__DOT__axi2mem__DOT__r_AWREADY));
-        bufp->chgIData(oldp+9,(vlSelf->axiTop__DOT__cpu2axi__DOT__r_WDATA),32);
-        bufp->chgBit(oldp+10,(vlSelf->axiTop__DOT__cpu2axi__DOT__r_WVALID));
-        bufp->chgBit(oldp+11,(vlSelf->axiTop__DOT__cpu2axi__DOT__r_WREADY));
-        bufp->chgBit(oldp+12,(vlSelf->axiTop__DOT__cpu2axi__DOT__r_BREADY));
-        bufp->chgBit(oldp+13,(vlSelf->axiTop__DOT__axi2mem__DOT__r_BVALID));
-        bufp->chgIData(oldp+14,(vlSelf->axiTop__DOT__axi2mem__DOT__r_WDATA),32);
-        bufp->chgBit(oldp+15,(vlSelf->axiTop__DOT__axi2mem__DOT__r_WREADY));
-        bufp->chgIData(oldp+16,(vlSelf->axiTop__DOT__axi2mem__DOT__r_AWADDR),32);
-        bufp->chgIData(oldp+17,(vlSelf->axiTop__DOT__cpu2axi__DOT__r_RDATA),32);
+        bufp->chgIData(oldp+9,(vlSelf->axiTop__DOT__addr_w),32);
+        bufp->chgIData(oldp+10,(vlSelf->axiTop__DOT__addr_r),32);
+        bufp->chgIData(oldp+11,(vlSelf->axiTop__DOT__cpu2axi__DOT__r_WDATA),32);
+        bufp->chgBit(oldp+12,(vlSelf->axiTop__DOT__cpu2axi__DOT__r_WVALID));
+        bufp->chgBit(oldp+13,(vlSelf->axiTop__DOT__axi2mem__DOT__r_WREADY));
+        bufp->chgBit(oldp+14,(vlSelf->axiTop__DOT__axi2mem__DOT__r_BVALID));
+        bufp->chgBit(oldp+15,(vlSelf->axiTop__DOT__cpu2axi__DOT__r_BREADY));
+        bufp->chgIData(oldp+16,(vlSelf->axiTop__DOT__cpu2axi__DOT__r_RDATA),32);
     }
-    bufp->chgBit(oldp+18,(vlSelf->clk));
-    bufp->chgBit(oldp+19,(vlSelf->rst));
-    bufp->chgIData(oldp+20,(vlSelf->read_data_m),32);
-    bufp->chgIData(oldp+21,(vlSelf->addr_m),32);
-    bufp->chgIData(oldp+22,(vlSelf->write_data_m),32);
-    bufp->chgBit(oldp+23,(vlSelf->wen));
-    bufp->chgBit(oldp+24,(vlSelf->ren));
-    bufp->chgIData(oldp+25,(vlSelf->read_data_s),32);
-    bufp->chgIData(oldp+26,(vlSelf->addr_s),32);
-    bufp->chgIData(oldp+27,(vlSelf->write_data_s),32);
+    bufp->chgBit(oldp+17,(vlSelf->clk));
+    bufp->chgBit(oldp+18,(vlSelf->rst));
+    bufp->chgIData(oldp+19,(vlSelf->read_data_m),32);
+    bufp->chgIData(oldp+20,(vlSelf->addr_m),32);
+    bufp->chgIData(oldp+21,(vlSelf->write_data_m),32);
+    bufp->chgBit(oldp+22,(vlSelf->wen));
+    bufp->chgBit(oldp+23,(vlSelf->ren));
+    bufp->chgIData(oldp+24,(vlSelf->read_data_s),32);
+    bufp->chgIData(oldp+25,(vlSelf->addr_s),32);
+    bufp->chgIData(oldp+26,(vlSelf->write_data_s),32);
+    bufp->chgCData(oldp+27,((((IData)(vlSelf->wen) 
+                              << 1U) | (IData)(vlSelf->ren))),2);
 }
 
 void VaxiTop___024root__trace_cleanup(void* voidSelf, VerilatedVcd* /*unused*/) {

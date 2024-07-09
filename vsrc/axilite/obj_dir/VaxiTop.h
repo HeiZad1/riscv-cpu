@@ -29,7 +29,6 @@ class alignas(VL_CACHE_LINE_BYTES) VaxiTop VL_NOT_FINAL : public VerilatedModel 
     VL_IN8(&rst,0,0);
     VL_IN8(&wen,0,0);
     VL_IN8(&ren,0,0);
-    VL_IN8(&__pinNumber11,0,0);
     VL_OUT(&read_data_m,31,0);
     VL_IN(&addr_m,31,0);
     VL_IN(&write_data_m,31,0);

@@ -92,6 +92,7 @@ extern "C" uint32_t read_imem(uint32_t addr) {
         std::cerr << "IMEM read error: invalid address 0x" << std::hex << addr << std::endl;
         return 0; // 或者返回其他错误码
     }
+    //contextp->timeInc(2);
 }
 
 // 写IMEM

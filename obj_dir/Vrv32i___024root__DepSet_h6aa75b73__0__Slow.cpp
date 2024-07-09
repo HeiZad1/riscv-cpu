@@ -19,6 +19,7 @@ VL_ATTR_COLD void Vrv32i___024root___eval_initial(Vrv32i___024root* vlSelf) {
     VL_DEBUG_IF(VL_DBG_MSGF("+    Vrv32i___024root___eval_initial\n"); );
     // Body
     Vrv32i___024root___eval_initial__TOP(vlSelf);
+    vlSelf->__Vm_traceActivity[5U] = 1U;
     vlSelf->__Vm_traceActivity[4U] = 1U;
     vlSelf->__Vm_traceActivity[3U] = 1U;
     vlSelf->__Vm_traceActivity[2U] = 1U;
@@ -98,6 +99,7 @@ VL_ATTR_COLD void Vrv32i___024root___eval_stl(Vrv32i___024root* vlSelf) {
     // Body
     if ((1ULL & vlSelf->__VstlTriggered.word(0U))) {
         Vrv32i___024root___stl_sequent__TOP__0(vlSelf);
+        vlSelf->__Vm_traceActivity[5U] = 1U;
         vlSelf->__Vm_traceActivity[4U] = 1U;
         vlSelf->__Vm_traceActivity[3U] = 1U;
         vlSelf->__Vm_traceActivity[2U] = 1U;
@@ -106,7 +108,6 @@ VL_ATTR_COLD void Vrv32i___024root___eval_stl(Vrv32i___024root* vlSelf) {
     }
 }
 
-void Vrv32i___024root____Vdpiimwrap_rv32i__DOT__imem__DOT__read_imem_TOP(IData/*31:0*/ addr, IData/*31:0*/ &read_imem__Vfuncrtn);
 void Vrv32i___024root____Vdpiimwrap_rv32i__DOT__dmem__DOT__read_dmem_TOP(IData/*31:0*/ addr, IData/*31:0*/ &read_dmem__Vfuncrtn);
 extern const VlUnpacked<SData/*13:0*/, 128> Vrv32i__ConstPool__TABLE_hee466112_0;
 extern const VlUnpacked<CData/*0:0*/, 32> Vrv32i__ConstPool__TABLE_ha204d35e_0;
@@ -116,6 +117,7 @@ VL_ATTR_COLD void Vrv32i___024root___stl_sequent__TOP__0(Vrv32i___024root* vlSel
     Vrv32i__Syms* const __restrict vlSymsp VL_ATTR_UNUSED = vlSelf->vlSymsp;
     VL_DEBUG_IF(VL_DBG_MSGF("+    Vrv32i___024root___stl_sequent__TOP__0\n"); );
     // Body
+    vlSelf->rv32i__DOT__axi__DOT__s2m_WREADY = vlSelf->rv32i__DOT__axi__DOT__axi2mem__DOT__r_WREADY;
     vlSelf->WriteData = ((0U == (IData)(vlSelf->rv32i__DOT__rv__DOT__SDypeSecM))
                           ? vlSelf->rv32i__DOT__rv__DOT__dp__DOT__WriteDataM
                           : ((1U == (IData)(vlSelf->rv32i__DOT__rv__DOT__SDypeSecM))
@@ -130,8 +132,6 @@ VL_ATTR_COLD void Vrv32i___024root___stl_sequent__TOP__0(Vrv32i___024root* vlSel
                                                                 (3U 
                                                                  & vlSelf->DataAdr), 3U))
                                   : 0U)));
-    Vrv32i___024root____Vdpiimwrap_rv32i__DOT__imem__DOT__read_imem_TOP(vlSelf->rv32i__DOT__PC, vlSelf->__Vfunc_rv32i__DOT__imem__DOT__read_imem__2__Vfuncout);
-    vlSelf->rv32i__DOT__Instr = vlSelf->__Vfunc_rv32i__DOT__imem__DOT__read_imem__2__Vfuncout;
     Vrv32i___024root____Vdpiimwrap_rv32i__DOT__dmem__DOT__read_dmem_TOP(vlSelf->DataAdr, vlSelf->__Vfunc_rv32i__DOT__dmem__DOT__read_dmem__3__Vfuncout);
     vlSelf->rv32i__DOT__ReadData = vlSelf->__Vfunc_rv32i__DOT__dmem__DOT__read_dmem__3__Vfuncout;
     vlSelf->rv32i__DOT__rv__DOT__c__DOT__ad__DOT__RtypeSub 
@@ -369,7 +369,7 @@ VL_ATTR_COLD void Vrv32i___024root___stl_sequent__TOP__0(Vrv32i___024root* vlSel
           ? ((IData)(vlSelf->rv32i__DOT__rv__DOT__jarlW)
               ? vlSelf->rv32i__DOT__rv__DOT__dp__DOT__ALUResultW
               : vlSelf->rv32i__DOT__rv__DOT__dp__DOT__PCTargetE)
-          : ((IData)(4U) + vlSelf->rv32i__DOT__PC));
+          : ((IData)(4U) + vlSelf->rv32i__DOT__PC_m));
     vlSelf->rv32i__DOT__rv__DOT__hu__DOT__lwStall = 
         ((1U == (IData)(vlSelf->rv32i__DOT__rv__DOT__ResultSrcE)) 
          & (((0x1fU & (vlSelf->rv32i__DOT__rv__DOT__InstrD 
@@ -445,9 +445,11 @@ VL_ATTR_COLD void Vrv32i___024root___ctor_var_reset(Vrv32i___024root* vlSelf) {
     vlSelf->WriteData = VL_RAND_RESET_I(32);
     vlSelf->DataAdr = VL_RAND_RESET_I(32);
     vlSelf->MemWrite = VL_RAND_RESET_I(1);
-    vlSelf->rv32i__DOT__PC = VL_RAND_RESET_I(32);
-    vlSelf->rv32i__DOT__Instr = VL_RAND_RESET_I(32);
+    vlSelf->rv32i__DOT__PC_m = VL_RAND_RESET_I(32);
+    vlSelf->rv32i__DOT__Instr_s = VL_RAND_RESET_I(32);
     vlSelf->rv32i__DOT__ReadData = VL_RAND_RESET_I(32);
+    vlSelf->rv32i__DOT__write_d = VL_RAND_RESET_I(32);
+    vlSelf->rv32i__DOT__re = VL_RAND_RESET_I(1);
     vlSelf->rv32i__DOT__rv__DOT__ALUSrcE = VL_RAND_RESET_I(1);
     vlSelf->rv32i__DOT__rv__DOT__RegWriteW = VL_RAND_RESET_I(1);
     vlSelf->rv32i__DOT__rv__DOT__RegWriteM = VL_RAND_RESET_I(1);
@@ -507,6 +509,7 @@ VL_ATTR_COLD void Vrv32i___024root___ctor_var_reset(Vrv32i___024root* vlSelf) {
     vlSelf->rv32i__DOT__rv__DOT__dp__DOT__WriteDataE = VL_RAND_RESET_I(32);
     vlSelf->rv32i__DOT__rv__DOT__dp__DOT__ReadDataW = VL_RAND_RESET_I(32);
     vlSelf->rv32i__DOT__rv__DOT__dp__DOT__writeReg = VL_RAND_RESET_I(32);
+    vlSelf->rv32i__DOT__rv__DOT__dp__DOT__fun3E = VL_RAND_RESET_I(3);
     vlSelf->rv32i__DOT__rv__DOT__dp__DOT__fun3M = VL_RAND_RESET_I(3);
     vlSelf->rv32i__DOT__rv__DOT__dp__DOT__fun3W = VL_RAND_RESET_I(3);
     for (int __Vi0 = 0; __Vi0 < 32; ++__Vi0) {
@@ -514,16 +517,33 @@ VL_ATTR_COLD void Vrv32i___024root___ctor_var_reset(Vrv32i___024root* vlSelf) {
     }
     vlSelf->rv32i__DOT__rv__DOT__hu__DOT__lwStall = VL_RAND_RESET_I(1);
     vlSelf->rv32i__DOT__dmem__DOT__unnamedblk1__DOT__masked_data = 0;
-    vlSelf->__Vfunc_rv32i__DOT__imem__DOT__read_imem__2__Vfuncout = 0;
+    vlSelf->rv32i__DOT__axi__DOT__s2m_RDATA = VL_RAND_RESET_I(32);
+    vlSelf->rv32i__DOT__axi__DOT__addr_w = VL_RAND_RESET_I(32);
+    vlSelf->rv32i__DOT__axi__DOT__addr_r = VL_RAND_RESET_I(32);
+    vlSelf->rv32i__DOT__axi__DOT__s2m_WREADY = VL_RAND_RESET_I(1);
+    vlSelf->rv32i__DOT__axi__DOT__s2m_BVALID = VL_RAND_RESET_I(1);
+    vlSelf->rv32i__DOT__axi__DOT__cpu2axi__DOT__r_ARVALID = VL_RAND_RESET_I(1);
+    vlSelf->rv32i__DOT__axi__DOT__cpu2axi__DOT__r_WDATA = VL_RAND_RESET_I(32);
+    vlSelf->rv32i__DOT__axi__DOT__cpu2axi__DOT__r_RDATA = VL_RAND_RESET_I(32);
+    vlSelf->rv32i__DOT__axi__DOT__cpu2axi__DOT__r_AWADDR = VL_RAND_RESET_I(32);
+    vlSelf->rv32i__DOT__axi__DOT__cpu2axi__DOT__r_AWVALID = VL_RAND_RESET_I(1);
+    vlSelf->rv32i__DOT__axi__DOT__cpu2axi__DOT__r_ARADDR = VL_RAND_RESET_I(32);
+    vlSelf->rv32i__DOT__axi__DOT__cpu2axi__DOT__r_BREADY = VL_RAND_RESET_I(1);
+    vlSelf->rv32i__DOT__axi__DOT__cpu2axi__DOT__r_WVALID = VL_RAND_RESET_I(1);
+    vlSelf->rv32i__DOT__axi__DOT__cpu2axi__DOT__r_RREADY = VL_RAND_RESET_I(1);
+    vlSelf->rv32i__DOT__axi__DOT__axi2mem__DOT__r_ARREADY = VL_RAND_RESET_I(1);
+    vlSelf->rv32i__DOT__axi__DOT__axi2mem__DOT__r_RVALID = VL_RAND_RESET_I(1);
+    vlSelf->rv32i__DOT__axi__DOT__axi2mem__DOT__r_AWREADY = VL_RAND_RESET_I(1);
+    vlSelf->rv32i__DOT__axi__DOT__axi2mem__DOT__r_WREADY = VL_RAND_RESET_I(1);
+    vlSelf->rv32i__DOT__axi__DOT__axi2mem__DOT__r_BVALID = VL_RAND_RESET_I(1);
     vlSelf->__Vfunc_rv32i__DOT__dmem__DOT__read_dmem__3__Vfuncout = 0;
     vlSelf->__Vtableidx1 = 0;
     vlSelf->__Vtableidx2 = 0;
-    vlSelf->__Vdlyvdim0__rv32i__DOT__rv__DOT__dp__DOT__rff__DOT__rf__v0 = 0;
-    vlSelf->__Vdlyvval__rv32i__DOT__rv__DOT__dp__DOT__rff__DOT__rf__v0 = VL_RAND_RESET_I(32);
-    vlSelf->__Vdlyvset__rv32i__DOT__rv__DOT__dp__DOT__rff__DOT__rf__v0 = 0;
+    vlSelf->__Vdly__rv32i__DOT__axi__DOT__cpu2axi__DOT__r_RDATA = VL_RAND_RESET_I(32);
+    vlSelf->__Vdly__rv32i__DOT__axi__DOT__axi2mem__DOT__r_ARREADY = VL_RAND_RESET_I(1);
     vlSelf->__Vtrigprevexpr___TOP__clk__0 = VL_RAND_RESET_I(1);
     vlSelf->__Vtrigprevexpr___TOP__reset__0 = VL_RAND_RESET_I(1);
-    for (int __Vi0 = 0; __Vi0 < 5; ++__Vi0) {
+    for (int __Vi0 = 0; __Vi0 < 6; ++__Vi0) {
         vlSelf->__Vm_traceActivity[__Vi0] = 0;
     }
 }

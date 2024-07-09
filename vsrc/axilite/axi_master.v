@@ -18,12 +18,12 @@ module axi_master(
         input   [31:0]         RDATA, //Read Data (32-bit only).
         //input   [ 1:0]         RRESP,
         input                  RVALID,
-        output                 RREADY,
+        output     reg            RREADY,
 
 
         //write addr channel
         output reg [31:0]         AWADDR,
-        output  [ 3:0]         AWPROT,
+        //output  [ 3:0]         AWPROT,
         output    reg             AWVALID,
         input                  AWREADY,
 
@@ -32,7 +32,7 @@ module axi_master(
         output reg [31:0]         WDATA,
         //output reg [ 3:0]         WSTRB,  //mask
         output  reg                WVALID,
-        output   reg               WREADY,
+        input   reg                WREADY,
 
         //Write Response Channel
         //input   [ 1:0]         BRESP,
@@ -53,7 +53,7 @@ module axi_master(
         reg     [31:0]          r_ARADDR;
         reg                     r_BREADY;
         reg                     r_WVALID;
-        reg                     r_WREADY;
+        //reg                     r_WREADY;
         reg                     r_RREADY;
 
 
@@ -70,77 +70,64 @@ module axi_master(
         //assign                    WSTRB= r_WSTRB;
         assign                    BREADY= r_BREADY;
         assign                     WVALID = r_WVALID;
-        assign                     WREADY = r_WREADY;
+        //assign                     WREADY = r_WREADY;
 
     
     //gen ARVALID
-    always@(posedge ACLK) begin
+    always@(posedge ACLK or posedge ARESETN) begin
         if(ARESETN) begin
-            r_ARVALID <= 1'b0;
             r_ARADDR  <= 32'b0;
-            r_RREADY  <= 1'b0;
+            r_ARVALID <= 1'b0;
+            r_RREADY <= 1'b0;
         end else if(read_start) begin    
             r_ARADDR <= read_address;       
-            r_ARVALID <= 1'b1;
-            r_RREADY  <= 1'b1;
         end else begin
-            r_ARVALID <= r_ARVALID;
             r_ARADDR  <= r_ARADDR;
-            r_RREADY  <= r_RREADY;
         end
     end
     //
-    
-
-
-        //logic addr shake hand
-    always@(posedge ACLK) begin
-        if(ARESETN) 
-            r_ARVALID <= 1'b0;
-        else if(ARREADY & r_ARVALID)
+    always@(posedge ACLK or posedge ARESETN) begin
+        if(read_start) 
+            r_ARVALID <= 1'b1;
+        else if((ARREADY & ARVALID) )
             r_ARVALID <= 1'b0;
         else
             r_ARVALID <= r_ARVALID;
     end
 
-    always@(posedge ACLK) begin
-        if(ARESETN) 
+    always@(posedge ACLK or posedge ARESETN) begin
+        if(read_start) 
+            r_RREADY <= 1'b1;
+        else if((RREADY & RVALID) )
             r_RREADY <= 1'b0;
-        else if(r_RREADY & RVALID)
-            r_RREADY <= 1'b0;
-            
         else
-            r_RREADY <= r_RREADY;   //??
-    end  
+            r_RREADY <= r_RREADY;
+    end
 
-     always@(posedge ACLK) begin
+
+        //logic addr shake hand
+ 
+
+     
+
+     always@(posedge ACLK or posedge ARESETN) begin
         if(ARESETN ) begin
-                r_RREADY <= 1'b0;
                 r_RDATA  <= 32'b0;
         end else if(RVALID) begin
-                r_RREADY <= 1'b1;
                 r_RDATA <=  RDATA;
         end else begin
-                r_RREADY <= r_RREADY;
                r_RDATA <=  r_RDATA;
         end
     end
     
-     always@(posedge ACLK) begin
-        if(ARESETN) 
-            r_RREADY <= 1'b0;
-        else if(r_RREADY & RVALID)
-            r_RREADY <= 1'b0;
-        else
-            r_RREADY <= r_RREADY;   //??
-    end
+
     //axi_flopr#(1) gen_ARVALID(ACLK,ARESETN,1'b0,,ARVALID);
 
 
 
 
     //write logic
-    always@(posedge ACLK) begin
+    always@(posedge ACLK or posedge ARESETN) begin
         if(ARESETN) begin
             r_WDATA  <=32'b0;
             r_AWADDR  <= 32'b0;
@@ -162,21 +149,18 @@ module axi_master(
         end
     end
 
-    always@(posedge ACLK) begin
+    always@(posedge ACLK or posedge ARESETN) begin
         if(ARESETN) begin
-            r_WVALID <= 1'b0;
             r_AWVALID<= 1'b0;
         end else if((r_AWVALID & AWREADY)&(WREADY & r_WVALID)) begin
-            r_WVALID <= 1'b0;
             r_AWVALID<= 1'b0;
         end else begin
-            r_WVALID <= r_WVALID;
-            r_WREADY <= r_WREADY;   
+            r_WVALID <= r_WVALID;   
         end
     end
     
 
-    always@(posedge ACLK) begin
+    always@(posedge ACLK or posedge ARESETN) begin
         if(ARESETN) begin
             r_BREADY <= 1'b0;
                     end

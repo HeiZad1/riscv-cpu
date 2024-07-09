@@ -22,7 +22,7 @@ extern "C" {
     extern void itrace(int PCF, int PCD, int PCE, int INF, int IND);
     // DPI import at vsrc/dmem.v:10:31
     extern int read_dmem(int addr);
-    // DPI import at vsrc/imem.v:5:31
+    // DPI import at vsrc/imem.v:7:31
     extern int read_imem(int addr);
     // DPI import at vsrc/dmem.v:11:32
     extern void write_imem(int addr, int data);

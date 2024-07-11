@@ -13,8 +13,10 @@
 
 
 module rv32i(
-    input                               clk                        ,
+    input                               clock                        ,
     input                               reset                      ,
+    input                               io_interrupt               ,
+
     output             [`XLEN-1: 0]     WriteData                  ,
     output             [`XLEN-1: 0]     DataAdr                    ,
     output                              MemWrite                   
@@ -32,7 +34,7 @@ module rv32i(
   // instantiate processor and memories
   riscv rv(clk, reset, PC, Instr, MemWrite, DataAdr,
                        WriteData, mask,ReadData);
-  imem imem(PC, Instr);
-  dmem dmem(clk, MemWrite, DataAdr, WriteData, mask,ReadData);
+  //imem imem(PC, Instr);
+  //dmem dmem(clk, MemWrite, DataAdr, WriteData, mask,ReadData);
 endmodule
 

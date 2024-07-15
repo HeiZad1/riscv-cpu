@@ -99,7 +99,7 @@ module axi_arbiter (
     reg [1:0] state;
     parameter IDLE = 2'b00, CPU1 = 2'b01, CPU2 = 2'b10;
 
-    always @(posedge clk or posedge reset) begin
+    always @(posedge clk ) begin
         if (reset) begin
             state <= IDLE;
             // 重置所有输出信号
@@ -209,6 +209,8 @@ module axi_arbiter (
                             xbar_bready <= 0;
                         end
                         state <= IDLE;
+                    end else begin
+                        state <= CPU1;
                     end
                     if (xbar_rvalid) begin
                         cpu1_rvalid <= 1;
@@ -222,6 +224,8 @@ module axi_arbiter (
                             xbar_rready <= 0;
                         end
                         state <= IDLE;
+                    end else begin
+                        state <= CPU1;
                     end
                 end
                 CPU2: begin
@@ -252,6 +256,8 @@ module axi_arbiter (
                             xbar_bready <= 0;
                         end
                         state <= IDLE;
+                    end else begin
+                        state <= CPU2;
                     end
                     if (xbar_rvalid) begin
                         cpu2_rvalid <= 1;
@@ -265,8 +271,11 @@ module axi_arbiter (
                             xbar_rready <= 0;
                         end
                         state <= IDLE;
+                    end else begin
+                        state <= CPU2;
                     end
                 end
+                default: state <=IDLE;
             endcase
         end
     end

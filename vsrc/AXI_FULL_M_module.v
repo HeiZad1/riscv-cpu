@@ -1,19 +1,16 @@
 module AXI_FULL_M_module#(
-    	parameter  C_M_TARGET_SLAVE_BASE_ADDR	= 32'h80000000,
-		parameter integer C_M_AXI_BURST_LEN	    = 1,//支持（1,2,4，8，16，32，64，128，256）
-		parameter integer C_M_AXI_ID_WIDTH	    = 1,
+    	parameter  C_M_TARGET_SLAVE_BASE_ADDR	= 32'h00000000,
+		parameter C_M_AXI_BURST_LEN	    = 8'b00000001,//支持（1,2,4，8，16，32，64，128，256）
+		parameter integer C_M_AXI_ID_WIDTH	    = 4,
 		parameter integer C_M_AXI_ADDR_WIDTH	= 32,
-		parameter integer C_M_AXI_DATA_WIDTH	= 32,
-		parameter integer C_M_AXI_AWUSER_WIDTH	= 0,
-		parameter integer C_M_AXI_ARUSER_WIDTH	= 0,
-		parameter integer C_M_AXI_WUSER_WIDTH	= 0,
-		parameter integer C_M_AXI_RUSER_WIDTH	= 0,
-		parameter integer C_M_AXI_BUSER_WIDTH	= 0 
+		parameter integer C_M_AXI_DATA_WIDTH	= 64
 )(
         input  wire                                  M_AXI_ACLK      ,
 		input  wire                                  M_AXI_ARESETN   ,
 
-        input wire   [C_M_AXI_ADDR_WIDTH-1 : 0]     addr,
+        input  wire  [C_M_AXI_ADDR_WIDTH-1 : 0]     addr,
+        output wire  [C_M_AXI_ADDR_WIDTH-1 : 0]     read_data,
+        input  wire  [C_M_AXI_ADDR_WIDTH-1 : 0]     write_data,
 
 		input  wire                                 M_AXI_AWREADY   ,
         output wire                                 M_AXI_AWVALID   ,
@@ -47,7 +44,7 @@ module AXI_FULL_M_module#(
         input  wire [1 : 0]                          M_AXI_RRESP     ,
         input  wire [C_M_AXI_DATA_WIDTH-1 : 0]       M_AXI_RDATA     ,
 		input  wire                                  M_AXI_RLAST     ,
-        input  wire [C_M_AXI_ID_WIDTH-1 : 0]         M_AXI_RID       ,
+        input  wire [C_M_AXI_ID_WIDTH-1 : 0]         M_AXI_RID       
 
         //===============================================================
         /*
@@ -112,7 +109,7 @@ wire   w_write_last                                     ;
 /**********************组合逻辑***********************/
 assign M_AXI_AWID    = 'd0                              ;
 assign M_AXI_AWLEN   =  C_M_AXI_BURST_LEN               ;
-assign M_AXI_AWSIZE  =  clogb2(C_M_AXI_DATA_WIDTH/8 -1) ;
+assign M_AXI_AWSIZE  =  3'b010 ;
 assign M_AXI_AWBURST =  2'b01                           ;
 /*
 assign M_AXI_AWLOCK  =  'd0                             ;
@@ -124,8 +121,8 @@ assign M_AXI_AWUSER  =  'd0                             ;
 assign M_AXI_AWADDR  = r_m_axi_awaddr + C_M_TARGET_SLAVE_BASE_ADDR ;
 assign M_AXI_AWVALID = r_m_axi_awvalid                  ;
 
-assign M_AXI_WSTRB   = {C_M_AXI_DATA_WIDTH{1'b1}}       ;
-assign M_AXI_WUSER   = 'd0                              ;
+assign M_AXI_WSTRB   = {8{1'b1}}       ;
+//assign M_AXI_WUSER   = 'd0                              ;
 assign M_AXI_WDATA   = r_m_axi_wdata                    ; 
 
 assign M_AXI_WLAST   = (C_M_AXI_BURST_LEN == 1) ? w_write_last : r_m_axi_wlast ; 
@@ -137,7 +134,7 @@ assign M_AXI_BREADY  = 1'b1                             ;
 assign M_AXI_ARID    = 'd0                              ;
 assign M_AXI_ARADDR  = r_m_axi_araddr + C_M_TARGET_SLAVE_BASE_ADDR;
 assign M_AXI_ARLEN   = C_M_AXI_BURST_LEN                ;
-assign M_AXI_ARSIZE  = clogb2(C_M_AXI_DATA_WIDTH/8 -1)  ;
+assign M_AXI_ARSIZE  =  3'b010 ;
 assign M_AXI_ARBURST = 2'b01                            ;
 /*
 assign M_AXI_ARLOCK  = 'd0                              ;
@@ -150,8 +147,11 @@ assign M_AXI_ARVALID = r_m_axi_arvalid                  ;
 
 assign M_AXI_RREADY  = r_m_axi_rready                   ;
 
-assign w_system_rst  = ~M_AXI_ARESETN                   ;
+assign w_system_rst  = M_AXI_ARESETN                   ;
 assign w_write_last  = M_AXI_WVALID && M_AXI_WREADY     ;
+
+assign  read_data = r_axi_read_data[31:0];
+
 /**********************例化***************************/
 
 
@@ -166,7 +166,7 @@ always@(posedge M_AXI_ACLK)
 
 always@(posedge M_AXI_ACLK)
     if(r_write_start)
-        r_m_axi_awaddr <= 'd0;
+        r_m_axi_awaddr <= addr;
     else 
         r_m_axi_awaddr <= 'd0;
 
@@ -182,7 +182,7 @@ always@(posedge M_AXI_ACLK)
     if(w_system_rst || M_AXI_WLAST)
         r_m_axi_wdata <= 'd1;
     else if(M_AXI_WVALID && M_AXI_WREADY)
-        r_m_axi_wdata <= r_m_axi_wdata + 1;
+        r_m_axi_wdata <= {32'b0,write_data};
     else 
         r_m_axi_wdata <= r_m_axi_wdata;
 
@@ -217,7 +217,7 @@ always@(posedge M_AXI_ACLK)
 
 always@(posedge M_AXI_ACLK)
     if(r_read_start)
-        r_m_axi_araddr <= 'd0;
+        r_m_axi_araddr <= addr;
     else
         r_m_axi_araddr <= 'd0;
     
@@ -244,7 +244,7 @@ always@(posedge M_AXI_ACLK)
 
 always@(*)
     case(r_st_current_write)
-        P_ST_IDLE        : r_st_next_write = P_ST_WRITE_START ;
+        P_ST_IDLE        : r_st_next_write = (r_st_current_read == P_ST_READ_END) ? P_ST_WRITE_START  : P_ST_IDLE;//P_ST_WRITE_START ;
         P_ST_WRITE_START : r_st_next_write = r_write_start ? P_ST_WRITE_TRANS : P_ST_WRITE_START ;
         P_ST_WRITE_TRANS : r_st_next_write = M_AXI_WLAST   ? P_ST_WRITE_END   : P_ST_WRITE_TRANS ;
         P_ST_WRITE_END   : r_st_next_write = (r_st_current_read == P_ST_READ_END) ? P_ST_IDLE : P_ST_WRITE_END;
@@ -266,7 +266,7 @@ always@(posedge M_AXI_ACLK)
 
 always@(*)
     case(r_st_current_read)
-        P_ST_IDLE        : r_st_next_read = (r_st_current_write == P_ST_WRITE_END) ? P_ST_READ_START  : P_ST_IDLE;
+        P_ST_IDLE        : r_st_next_read = P_ST_READ_START ; //(r_st_current_write == P_ST_WRITE_END) ? P_ST_READ_START  : P_ST_IDLE;
         P_ST_READ_START  : r_st_next_read = r_read_start ? P_ST_READ_TRANS : P_ST_READ_START;
         P_ST_READ_TRANS  : r_st_next_read = M_AXI_RLAST  ? P_ST_READ_END   : P_ST_READ_TRANS ;
         P_ST_READ_END    : r_st_next_read = P_ST_IDLE ;

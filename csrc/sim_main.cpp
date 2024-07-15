@@ -29,6 +29,9 @@
     
     extern "C" void initialize_imem(const char* filename);
     extern "C" void handle_ebreak();
+    extern "C" void flash_read(int32_t addr, int32_t *data) { assert(0); }
+    extern "C" void mrom_read(int32_t addr, int32_t *data) { assert(0); }
+
     //extern "C" void write_imem(uint32_t addr, uint32_t data);
      void load_imem(const char* filename);
     

@@ -87,7 +87,32 @@ extern "C" uint32_t read_imem(uint32_t addr) {
     if (it != imem.end()) {
         //std::cout<< "IMEM read success:  address 0x" << std::hex << addr << std::endl;
         //std::cout<< "IMEM read data   :          0x" << std::hex << it->second << std::endl;
-        return it->second;
+        return it->second;extern "C" void itrace(uint32_t PCF, uint32_t PCD,uint32_t PCE,uint32_t INF,uint32_t IND){
+    std::cout<<"==========================================="<<std::endl;
+    std::cout << "F:PC : " << std::hex << std::setw(8) << std::setfill('0') << PCF
+              << " INS: " << std::hex << std::setw(8) << std::setfill('0') << INF << std::endl;
+    std::cout << "D:PC : " << std::hex << std::setw(8) << std::setfill('0') << PCD
+              << " INS: " << std::hex << std::setw(8) << std::setfill('0') << IND << std::endl;
+    
+    bufferPC.pop_back();
+    bufferIN.pop_back();
+    bufferPC.push_front(toHexString(PCE));
+    if(PCE==0){
+
+        
+         bufferIN.pop_front();
+         bufferIN.push_front(toHexString(0));
+         bufferIN.push_front(toHexString(0));
+         //bufferIN = {"00000000", "00000000","00000000","00000000"};
+    }else{
+    bufferIN.push_front(toHexString(IND));
+    }
+    std::cout << "E:PC : " << std::hex << std::setw(8) << std::setfill('0') << PCE
+              << " INS: " << bufferIN[1] << std::endl;
+    std::cout<<"W:PC : "<< std::hex << bufferPC[1]<<" INS: "<< std::hex<<bufferIN[2]<<std::endl;
+    std::cout<<"M:PC : "<< std::hex << bufferPC[2]<<" INS: "<< std::hex<<bufferIN[3]<<std::endl;
+    std::cout<<"==========================================="<<std::endl;
+}
     } else {
         std::cerr << "IMEM read error: invalid address 0x" << std::hex << addr << std::endl;
         return 0; // 或者返回其他错误码

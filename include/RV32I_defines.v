@@ -17,5 +17,5 @@
 
 //ff
 `define NOP   		32'H00000013 
-`define RESET_PC    32'H80000000 
+`define RESET_PC    32'H20000004 
 

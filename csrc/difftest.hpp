@@ -5,8 +5,8 @@
 #include <fstream>
 #include <sstream>
 #include "verilated.h"
-#include "Vrv32i___024root.h"
-#include "Vrv32i.h"
+#include "VysyxSoCFull___024root.h"
+#include "VysyxSoCFull.h"
 #include <deque>
 #include <string>
 #include <iomanip> 

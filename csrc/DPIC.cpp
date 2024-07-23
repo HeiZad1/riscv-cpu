@@ -1,12 +1,20 @@
 
 #include "difftest.hpp"
+#include <array>
 // DPIC函数
 // DPIC函数
 
 std::unordered_map<uint32_t, uint32_t> imem;
 std::unordered_map<uint32_t, uint32_t> dmem;
+std::unordered_map<uint32_t, uint32_t> mrom;
+std::unordered_map<uint32_t, uint32_t> flash;
 std::deque<std::string> bufferPC = {"80000000", "80000000","80000000"};
 std::deque<std::string> bufferIN = {"00000000", "00000000","00000000","00000000"};
+std::array<std::array<int, 2048>, 2048> psram;
+std::array<std::array<int, 8192>, 516> sdram_1;
+std::array<std::array<int, 8192>, 516> sdram_2;
+std::array<std::array<int, 8192>, 516> sdram_3;
+std::array<std::array<int, 8192>, 516> sdram_4;
 
 std::string toHexString(uint32_t value) {
     std::stringstream ss;
@@ -17,7 +25,7 @@ extern "C" void write_imem(uint32_t addr, uint32_t data);
 extern "C" void handle_ebreak() {
     if(bufferIN[3]=="00100073"){
 
-    if (top->rootp->rv32i__DOT__rv__DOT__dp__DOT__rff__DOT__rf[10] != 0) {
+    if (top->rootp->ysyxSoCFull__DOT__asic__DOT__cpu__DOT__cpu__DOT__rv__DOT__dp__DOT__rff__DOT__rf[10] != 0) {
         std::cerr << "HIT BAD TRAP " << std::endl;
         std::exit(EXIT_FAILURE);
     } else {
@@ -48,30 +56,32 @@ extern "C" void initialize_imem(const char* filename) {
     infile.close();
 }
 
- void load_imem(const char* filename) {
+ void load_mem(const uint32_t start_addr,const char* filename) {
+    uint32_t end_addr;
+    if(start_addr == 0x20000000)
+        end_addr = 0x20000fff;
+    if(start_addr == 0x30000000)
+        end_addr = 0x3fffffff;
     // 打开文件
     std::ifstream infile(filename, std::ios::binary);
     if (!infile.is_open()) {
         std::cerr << "Error opening file: " << filename << std::endl;
         std::exit(EXIT_FAILURE);
     }
-
     // 获取文件大小
     infile.seekg(0, std::ios::end);
     std::streamsize size = infile.tellg();
     infile.seekg(0, std::ios::beg);
 
-   
-    uint32_t addr = 0x80000000;
+    uint32_t addr = start_addr;
     uint32_t data;
-
     // 读取文件并写入内存
     while (infile.read(reinterpret_cast<char*>(&data), sizeof(data))) {
         //std::cout<<std::hex<<addr<<std::endl;
-        write_imem(addr, data);
+        mrom[addr] = data;
         addr += 4; // 每条指令占4个字节
+        assert((addr >= start_addr) && (addr <= end_addr));
     }
-
     // 检查读取文件是否有错误
     if (!infile.eof()) {
         std::cerr << "Error reading file: " << filename << std::endl;
@@ -87,32 +97,10 @@ extern "C" uint32_t read_imem(uint32_t addr) {
     if (it != imem.end()) {
         //std::cout<< "IMEM read success:  address 0x" << std::hex << addr << std::endl;
         //std::cout<< "IMEM read data   :          0x" << std::hex << it->second << std::endl;
-        return it->second;extern "C" void itrace(uint32_t PCF, uint32_t PCD,uint32_t PCE,uint32_t INF,uint32_t IND){
-    std::cout<<"==========================================="<<std::endl;
-    std::cout << "F:PC : " << std::hex << std::setw(8) << std::setfill('0') << PCF
-              << " INS: " << std::hex << std::setw(8) << std::setfill('0') << INF << std::endl;
-    std::cout << "D:PC : " << std::hex << std::setw(8) << std::setfill('0') << PCD
-              << " INS: " << std::hex << std::setw(8) << std::setfill('0') << IND << std::endl;
+        return it->second;
     
-    bufferPC.pop_back();
-    bufferIN.pop_back();
-    bufferPC.push_front(toHexString(PCE));
-    if(PCE==0){
 
-        
-         bufferIN.pop_front();
-         bufferIN.push_front(toHexString(0));
-         bufferIN.push_front(toHexString(0));
-         //bufferIN = {"00000000", "00000000","00000000","00000000"};
-    }else{
-    bufferIN.push_front(toHexString(IND));
-    }
-    std::cout << "E:PC : " << std::hex << std::setw(8) << std::setfill('0') << PCE
-              << " INS: " << bufferIN[1] << std::endl;
-    std::cout<<"W:PC : "<< std::hex << bufferPC[1]<<" INS: "<< std::hex<<bufferIN[2]<<std::endl;
-    std::cout<<"M:PC : "<< std::hex << bufferPC[2]<<" INS: "<< std::hex<<bufferIN[3]<<std::endl;
-    std::cout<<"==========================================="<<std::endl;
-}
+
     } else {
         std::cerr << "IMEM read error: invalid address 0x" << std::hex << addr << std::endl;
         return 0; // 或者返回其他错误码
@@ -168,6 +156,58 @@ extern "C" void itrace(uint32_t PCF, uint32_t PCD,uint32_t PCE,uint32_t INF,uint
     std::cout<<"M:PC : "<< std::hex << bufferPC[2]<<" INS: "<< std::hex<<bufferIN[3]<<std::endl;
     std::cout<<"==========================================="<<std::endl;
 }
+
+
+extern "C" void mrom_read(int32_t addr, int32_t *data){
+    //std::cout<<std::hex <<addr<<std::endl;
+    assert((addr >= 0x20000000) && (addr <= 0x20000fff));
+    *data = mrom[addr];
+}
+
+
+extern "C" void read_psram(uint32_t addrx,uint32_t addry,uint32_t *data){
+    *data = psram[addrx][addry]; 
+}
+
+extern "C" void write_psram(uint32_t addrx,uint32_t addry,uint32_t *data){
+    psram[addrx][addry] = *data ; 
+}
+
+extern "C" void flash_read(int32_t addr, int32_t *data){
+    assert((addr >= 0x30000000) && (addr <= 0x3ffffffff));
+    *data = flash[addr];
+}
+
+extern "C" void read_sdram1(uint32_t addrx,uint32_t addry,uint32_t *data){
+    *data = sdram_1[addrx][addry]; 
+}
+
+extern "C" void write_sdram1(uint32_t addrx,uint32_t addry,uint32_t *data){
+    sdram_1[addrx][addry] = *data ; 
+}
+
+extern "C" void read_sdram2(uint32_t addrx,uint32_t addry,uint32_t *data){
+    *data = sdram_2[addrx][addry]; 
+}
+
+extern "C" void write_sdram2(uint32_t addrx,uint32_t addry,uint32_t *data){
+    sdram_2[addrx][addry] = *data ; 
+}
+extern "C" void read_sdram3(uint32_t addrx,uint32_t addry,uint32_t *data){
+    *data = sdram_3[addrx][addry]; 
+}
+
+extern "C" void write_sdram3(uint32_t addrx,uint32_t addry,uint32_t *data){
+    sdram_3[addrx][addry] = *data ; 
+}
+extern "C" void read_sdram4(uint32_t addrx,uint32_t addry,uint32_t *data){
+    *data = sdram_4[addrx][addry]; 
+}
+
+extern "C" void write_sdram4(uint32_t addrx,uint32_t addry,uint32_t *data){
+    sdram_4[addrx][addry] = *data ; 
+}
+
 
 
 

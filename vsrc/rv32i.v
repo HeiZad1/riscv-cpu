@@ -166,9 +166,13 @@ module rv32i(
     wire              [63:0]                  io_master_rdata_s             ; 
     wire                                io_master_rlast_s             ; 
     wire              [ 3:0]                  io_master_rid_s               ; 
+    wire                                stallRead                     ;
+    wire                                MemReadM                      ;
+
+
   // instantiate processor and memories
   riscv rv(clock, reset, PC, Instr, MemWrite, DataAdr,
-                       WriteData, mask,ReadData);
+                       WriteData, mask,MemReadM,ReadData,stallRead);
   //imem imem(PC, Instr);
   //dmem dmem(clk, MemWrite, DataAdr, WriteData, mask,ReadData);
 AXI_FULL_M_module axi_m_if(
@@ -176,7 +180,10 @@ AXI_FULL_M_module axi_m_if(
   .M_AXI_ARESETN  (reset)           ,
   .addr           (PC)           ,
   .read_data      (Instr)           ,
-  .write_data     (),             
+  .write_data     (),           
+  .axi_stall      (stallRead), 
+  .ren(1'b1),
+  .wen(1'b0), 
   .M_AXI_AWREADY  (io_master_awready_m )           ,
   .M_AXI_AWVALID  (io_master_awvalid_m)           ,
   .M_AXI_AWADDR   (io_master_awaddr_m)           ,
@@ -213,7 +220,10 @@ AXI_FULL_M_module axi_m_if(
   .M_AXI_ARESETN  (reset)           ,
   .addr           (DataAdr)           ,
   .read_data      (ReadData)           ,
-  .write_data     (WriteData),             
+  .write_data     (WriteData),
+  .axi_stall      (),//jia
+  .ren(MemReadM),
+  .wen(MemWrite),              
   .M_AXI_AWREADY  (io_master_awready_s )           ,
   .M_AXI_AWVALID  (io_master_awvalid_s)           ,
   .M_AXI_AWADDR   (io_master_awaddr_s)           ,

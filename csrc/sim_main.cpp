@@ -1,7 +1,7 @@
-  #include "Vrv32i.h"
+  #include "VysyxSoCFull.h"
   #include "verilated.h"
-  #include "Vrv32i__Dpi.h"
-  #include "Vrv32i___024root.h"
+  #include "VysyxSoCFull__Dpi.h"
+  #include "VysyxSoCFull___024root.h"
   #include <iostream>
   #include <getopt.h>
   #include <cassert>
@@ -14,6 +14,7 @@
     #define BLUE    "\033[34m"
     #define RESET_VECTOR 0x80000000
     #define RESET   "\033[0m"
+
  
 
     void difftest(uint64_t n);
@@ -25,19 +26,21 @@
     static int difftest_port = 1234;
     VerilatedContext* contextp = nullptr;
     VerilatedVcdC* tfp = nullptr;
-    Vrv32i* top = nullptr;
+    VysyxSoCFull* top = nullptr;
     
     extern "C" void initialize_imem(const char* filename);
     extern "C" void handle_ebreak();
-    extern "C" void flash_read(int32_t addr, int32_t *data) { assert(0); }
-    extern "C" void mrom_read(int32_t addr, int32_t *data) { assert(0); }
+    extern "C" void flash_read(int32_t addr, int32_t *data) ;
+    extern "C" void mrom_read(int32_t addr, int32_t *data) ;
+    
 
     //extern "C" void write_imem(uint32_t addr, uint32_t data);
-     void load_imem(const char* filename);
+     void load_mrom(const char* filename);
     
 
     std::deque<bool> bufferStall = {0,0,0,0};
     std::deque<bool> bufferJamp = {0,0,0,0,0};
+    //std::deque<bool> bufferAxi = {0,0,0,0};
 
     
 
@@ -81,29 +84,31 @@
         uint64_t t = n;
         for(;n>0;n --){   
              
-        top->clk = !top->clk;
+        top->clock = !top->clock;
         top->eval();
         tfp->dump(contextp->time());
         contextp->timeInc(1);
 
-        top->clk = !top->clk;
+        top->clock = !top->clock;
         top->eval();
         tfp->dump(contextp->time());
         contextp->timeInc(1);
 
         bufferStall.pop_back();
         bufferJamp.pop_back();
-        bufferStall.push_front(top->rootp->rv32i__DOT__rv__DOT__hu__DOT__lwStall);
-        bufferJamp.push_front(top->rootp->rv32i__DOT__rv__DOT__PCSrcE);
-
+        //bufferAxi.pop_back();
+        bufferStall.push_front(top->rootp->ysyxSoCFull__DOT__asic__DOT__cpu__DOT__cpu__DOT__rv__DOT__hu__DOT__lwStall);
+        bufferJamp.push_front(top->rootp->ysyxSoCFull__DOT__asic__DOT__cpu__DOT__cpu__DOT__rv__DOT__PCSrcE);
+        //bufferAxi.push_front(top->rootp->ysyxSoCFull__DOT__asic__DOT__cpu__DOT__cpu__DOT__axi_m_if__DOT__r_stallRead);
+/*流水线暂停
         if(bufferJamp[4])
           //std::cout<<bufferJamp[2]<<std::endl;
           n+=2;
         if(bufferStall[3])
          //std::cout<<bufferStall[1]<<std::endl;
-          n+=1;
+          n+=1;*/
         }
-
+  
         
     }
 
@@ -118,37 +123,38 @@
     contextp = new VerilatedContext;  // 创建一个VerilatedContext对象，用于管理仿真上下文
     contextp->commandArgs(argc, argv);                  // 解析命令行参数
 
-    top = new Vrv32i{contextp};
+    top = new VysyxSoCFull{contextp};
 
     tfp = new VerilatedVcdC;
     Verilated::traceEverOn(true);
     top->trace(tfp, 99);
-    tfp->open("rv32i.vcd");
+    tfp->open("ysyxSoCFull.vcd");
     
                           // 创建顶层模块的实例
      parse_args_npc(argc,argv);
      std::cout<<BLUE<<img_file<<std::endl;
-     load_imem(img_file);
+     load_mrom(img_file);
      //initialize_imem("riscvtest.txt");
-     top->clk = 0;
+     top->clock = 0;
      top->reset = 1;
-     int reset_cycles = 10; 
+     int reset_cycles = 30; 
      while (reset_cycles > 0) {
-        top->clk = !top->clk;
+        top->clock = !top->clock;
         top->eval();
         contextp->timeInc(1);
         tfp->dump(contextp->time()); 
         reset_cycles--;
         } 
+            top->clock = !top->clock;
             top->reset = 0;  // 结束复位
         
-        top->eval();
+
     // 仿真主循环
     //init_nemu_mem();
     #ifdef difftest1
     difftest_init(1);
     init_nemu_mem();
-    cpu_exec(4);
+    cpu_exec(17);
     //difftest();
     #endif
     sdb_mainloop();

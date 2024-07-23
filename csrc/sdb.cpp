@@ -13,9 +13,6 @@
 * See the Mulan PSL v2 for more details.
 ***************************************************************************************/
 
-#include "verilated.h"
-#include "Vrv32i.h"
-//#include <cpu/cpu.h>
 #include <readline/readline.h>
 #include <readline/history.h>
 //#include <memory/host.h>
@@ -70,15 +67,17 @@ static int cmd_si(char *args) {
   uint64_t nb_ex;
   //uint64_t cnt=0;
   if (sscanf(args," %ld",&nb_ex)==1){
-    
-    cpu_exec(nb_ex);
+    for(;nb_ex>0;nb_ex--){
+    cpu_exec(5);
     #ifdef difftest1
     //if(bufferPC[2] == "00000000"){
       //cpu_exec(2);
     //}
     
-    difftest(nb_ex);
+    difftest(1);
+    cpu_exec(3);
     #endif
+    }
     return 0;
     
     
@@ -270,7 +269,7 @@ void init_sdb() {
 
 void isa_reg_display(){
   for(int i=0;i<32;i++){
-    std::cout<<  regs[i]<<":" << top->rootp->rv32i__DOT__rv__DOT__dp__DOT__rff__DOT__rf[i]<<std::endl;
+    std::cout<<  regs[i]<<":" << top->rootp->ysyxSoCFull__DOT__asic__DOT__cpu__DOT__cpu__DOT__rv__DOT__dp__DOT__rff__DOT__rf[i]<<std::endl;
   }
 
 }

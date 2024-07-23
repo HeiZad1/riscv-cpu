@@ -51,8 +51,8 @@ void difftest(uint64_t n){
     difftest_regcpy(buf_reg,nemu2npc);
     std::cout << std::endl;
     for(int i=0;i<32;i++){
-        if(top->rootp->rv32i__DOT__rv__DOT__dp__DOT__rff__DOT__rf[i]!=buf_reg[i]){
-            std::cout<<"error state at "<< regs[i] <<" npc reg value : "<< std::hex << top->rootp->rv32i__DOT__rv__DOT__dp__DOT__rff__DOT__rf[i]
+        if(top->rootp->ysyxSoCFull__DOT__asic__DOT__cpu__DOT__cpu__DOT__rv__DOT__dp__DOT__rff__DOT__rf[i]!=buf_reg[i]){
+            std::cout<<"error state at "<< regs[i] <<" npc reg value : "<< std::hex << top->rootp->ysyxSoCFull__DOT__asic__DOT__cpu__DOT__cpu__DOT__rv__DOT__dp__DOT__rff__DOT__rf[i]
                         <<" nemu reg value: "<<std::hex<< buf_reg[i]<<std::endl;
             
             
@@ -79,7 +79,7 @@ void init_nemu_mem(){
 
     uint32_t buf_mem[size];
    
-    uint32_t addr = 0x80000000;
+    uint32_t addr = 0x20000000;
     uint32_t data;
     int i=0;
 
@@ -98,5 +98,5 @@ void init_nemu_mem(){
 
     infile.close();
 
-    difftest_memcpy(0x80000000,buf_mem,size,npc2nemu);
+    difftest_memcpy(0x20000000,buf_mem,size,npc2nemu);
 }

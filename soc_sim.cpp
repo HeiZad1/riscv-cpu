@@ -1,6 +1,7 @@
 #include <verilated.h>
 #include "VysyxSoCFull.h"
 #include "verilated_vcd_c.h"
+#include "sdb.hpp"
 #include <deque>
 #include <iomanip> 
 #include <iostream>

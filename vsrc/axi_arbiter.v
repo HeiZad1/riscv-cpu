@@ -143,25 +143,10 @@ module axi_arbiter (
             case (state)
                 IDLE: begin
                     // 优先级选择 CPU1 > CPU2
-                    if (cpu1_arvalid) begin
-                        state <= CPU1;
-                        cpu1_arready <= 1;
-                        xbar_arvalid <= 1;
-                        xbar_araddr <= cpu1_araddr;
-                        xbar_arid <= cpu1_arid;
-                        xbar_arlen <= cpu1_arlen;
-                        xbar_arsize <= cpu1_arsize;
-                        xbar_arburst <= cpu1_arburst;
-                    end else if (cpu1_awvalid) begin
-                        state <= CPU1;
-                        cpu1_awready <= 1;
-                        xbar_awvalid <= 1;
-                        xbar_awaddr <= cpu1_awaddr;
-                        xbar_awid <= cpu1_awid;
-                        xbar_awlen <= cpu1_awlen;
-                        xbar_awsize <= cpu1_awsize;
-                        xbar_awburst <= cpu1_awburst;
-                    end else if (cpu2_arvalid) begin
+                    cpu1_rvalid <= 0;
+                    xbar_rready <= 0;
+                    cpu1_rlast <= 0;
+                    if (cpu2_arvalid) begin
                         state <= CPU2;
                         cpu2_arready <= 1;
                         xbar_arvalid <= 1;
@@ -179,14 +164,38 @@ module axi_arbiter (
                         xbar_awlen <= cpu2_awlen;
                         xbar_awsize <= cpu2_awsize;
                         xbar_awburst <= cpu2_awburst;
+                    end if (cpu1_arvalid) begin
+                        state <= CPU1;
+                        cpu1_arready <= xbar_arready;
+                        xbar_arvalid <= 1;
+                        xbar_araddr <= cpu1_araddr;
+                        xbar_arid <= cpu1_arid;
+                        xbar_arlen <= cpu1_arlen;
+                        xbar_arsize <= cpu1_arsize;
+                        xbar_arburst <= cpu1_arburst;
+                    end else if (cpu1_awvalid) begin
+                        state <= CPU1;
+                        cpu1_awready <= 1;
+                        xbar_awvalid <= 1;
+                        xbar_awaddr <= cpu1_awaddr;
+                        xbar_awid <= cpu1_awid;
+                        xbar_awlen <= cpu1_awlen;
+                        xbar_awsize <= cpu1_awsize;
+                        xbar_awburst <= cpu1_awburst;
+                    
+                    end else begin
+                        state <= IDLE;
                     end
                 end
                 CPU1: begin
                     // 处理CPU1的读写请求
+
+ 
                     if (cpu1_arvalid && xbar_arready) begin
                         xbar_arvalid <= 0;
                         cpu1_arready <= 0;
-                        state <= IDLE;
+                        xbar_araddr  <= 0;
+                        state <= CPU1;
                     end else if (cpu1_awvalid && xbar_awready) begin
                         xbar_awvalid <= 0;
                         cpu1_awready <= 0;
@@ -216,15 +225,18 @@ module axi_arbiter (
                         cpu1_rvalid <= 1;
                         cpu1_rdata <= xbar_rdata;
                         cpu1_rresp <= xbar_rresp;
-                        cpu1_rlast <= xbar_rlast;
+                        cpu1_rlast <= 1;
                         cpu1_rid <= xbar_rid;
                         if (cpu1_rready) begin
                             xbar_rready <= 1;
+                            state <= IDLE;
                         end else begin
                             xbar_rready <= 0;
+                            state <= CPU1;
                         end
-                        state <= IDLE;
+
                     end else begin
+                        xbar_rready <= 0;
                         state <= CPU1;
                     end
                 end

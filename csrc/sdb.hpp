@@ -17,17 +17,17 @@
 #define __SDB_H__
 
 #include "verilated.h"
-#include "Vrv32i___024root.h"
-#include "Vrv32i.h"
+#include "VysyxSoCFull___024root.h"
+#include "VysyxSoCFull.h"
 #include <ostream>
 #include <iostream>
 #include "difftest.hpp"
 
 #define ARRLEN(arr) (sizeof(arr) / sizeof((arr)[0]))
-   #define difftest1
+#define difftest1
 
 extern VerilatedContext* contextp;
-extern Vrv32i* top;
+extern VysyxSoCFull* top;
 //extern  char *regs[];
 
 

@@ -7,7 +7,9 @@ module riscv(	   input        		 clk, reset,
                    //output   [5:0]        DataAdrR,
 				   output   [`XLEN-1:0]	 WriteData,
 				   output   [`XLEN-1:0]	 mask,
-                   input    [`XLEN-1:0]  ReadData
+                   output                MemReadM,
+                   input    [`XLEN-1:0]  ReadData,
+                   input                 stallRead
                     );
 
   wire       			  ALUSrcE;
@@ -39,22 +41,25 @@ module riscv(	   input        		 clk, reset,
   wire [`RFIDX_WIDTH-1:0] Rs2E;
   /* verilator lint_off UNUSEDSIGNAL */
   wire [`XLEN-1:0] 		  InstrD;
+  wire                    stall_d,stall_f;  
   /* verilator lint_off UNUSEDSIGNAL */
   //wire [5:0]              DataAdrR;
   //wire [`XLEN-1:0]        ALUResultM;
   //assign                  DataAdrR=ALUResultM[7:2];
+  assign                stall_d = stallD | stallRead;
+  assign                stall_f = stallF |stallRead;
 
 
   controller c(clk,reset,InstrD[6:0], InstrD[14:12], InstrD[30], Zero,less,ResultSrcE,
                ResultSrcW, ResultSrcM,MemWrite, PCSrcE,
-               ALUSrcE, loadW,jarlW,RegWriteW, RegWriteM,
-               ImmSrcD, ALUControlE,SDypeSecM,FlushE);
+               ALUSrcE, loadW,jarlW,MemReadM,RegWriteW, RegWriteM,
+               ImmSrcD, ALUControlE,SDypeSecM,FlushE );//由于取指令时间太常，流水县不能运作，暂时停止冲刷。
   datapath dp(clk, reset, ResultSrcW, PCSrcE,
               ALUSrcE, RegWriteW,loadW,jarlW,
               ImmSrcD, ALUControlE,SDypeSecM,
               Zero,less, PCF, Instr,
               ALUResultM,WriteData, ReadData,
-			  stallD,stallF,FlushD,FlushE,ForWordAE,ForWordBE,
+			  stall_d,stall_f,FlushD,FlushE,ForWordAE,ForWordBE,//由于取指令时间太常，流水县不能运作，暂时停止冲刷。
 			  RdW,RdM,RdE,
 			  Rs1D,Rs2D,Rs1E,Rs2E,InstrD,mask
 			  );

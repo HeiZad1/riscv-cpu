@@ -11,11 +11,13 @@ module controller(
     output             [   1: 0]        ResultSrcM                 ,
     output                              MemWriteM                  ,
     output                              PCSrcE, ALUSrcE,loadW,jarlW,//XINJIADE
+    output                              MemReadM                   ,
     output                              RegWriteW, RegWriteM ,//?????
     output             [   2: 0]        ImmSrcD                    ,
     output             [   3: 0]        ALUControlE                ,
     output             [   1: 0]        SDypeSecM                  ,
-    input                               FlushE                    );                    
+    input                               FlushE                     
+    );                    
 
     wire               [   1: 0]        ALUOp                      ;
     wire               [   1: 0]        ResultSrcD                 ;
@@ -41,19 +43,18 @@ module controller(
     wire                                loadE                      ;
     wire                                loadM                      ;
     wire                                branchScr                  ;
-	
+    wire                                MemReadD                   ;
+	  wire                                MemReadE                   ;
 	
     maindec md(op, ResultSrcD, MemWriteD, BranchD,
-             ALUSrcD, RegWriteD, JumpD,loadD,jarlD, ImmSrcD, ALUOp);
+             ALUSrcD, RegWriteD, JumpD,loadD,jarlD,MemReadD, ImmSrcD, ALUOp);
   aludec    ad(op[5], funct3, funct7b5, ALUOp, ALUControlD);
   Blu       blu(funct3E,ZeroE,l,branchScr);
   sDypedec  SD(funct3,SDypeSec);
   //REGE
   
-  floprs #( 1) Ereg9 (clk, reset, FlushE, RegWriteD, RegWriteE);
+  floprs #( 1) Ereg9 (clk, reset, FlushE,  RegWriteD, RegWriteE);
   floprs #( 2) Ereg10(clk, reset, FlushE , ResultSrcD, ResultSrcE);
-  
-  
   floprs #( 1) Ereg11(clk,  reset, FlushE, MemWriteD, MemWriteE);
   floprs #( 1) Ereg12(clk,  reset, FlushE, JumpD, JumpE);
   floprs #( 1) Ereg13(clk,  reset, FlushE, BranchD, BranchE);
@@ -63,6 +64,7 @@ module controller(
   floprs #( 2) Ereg17(clk,  reset, FlushE, SDypeSec, SDypeSecE);
   floprs #( 3) Ereg18(clk,  reset, FlushE, funct3, funct3E);
   floprs #( 1) Ereg19(clk,  reset, FlushE, jarlD, jarlE);
+  floprs #( 1) Ereg20(clk,  reset, FlushE, MemReadD, MemReadE);
   
   //REGM
   flopr #( 1) Mreg5 (clk, reset , RegWriteE, RegWriteM);
@@ -71,6 +73,8 @@ module controller(
   flopr #( 1) Mreg8 (clk,  reset, loadE, loadM);
   flopr #( 2) Mreg9 (clk,  reset, SDypeSecE, SDypeSecM);
   flopr #( 1) Mreg10(clk,  reset, jarlE, jarlM);
+  flopr #( 1) Mreg11(clk,  reset, MemReadE, MemReadM);
+
   //REGW
   flopr #( 1) Wreg5 (clk, reset , RegWriteM, RegWriteW);
   flopr #( 2) Wreg6 (clk, reset , ResultSrcM, ResultSrcW);

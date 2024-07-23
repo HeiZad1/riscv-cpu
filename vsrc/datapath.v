@@ -205,27 +205,27 @@ module datapath(input                  clk,
     enfloprspc4 #(`XLEN) Dreg3(clk, 1'b0 ,FlushD, ~stallD,PCPlus4F, PCPlus4D);
     
 	
-	//regE
-    floprs #(`XLEN) Ereg1(clk, reset, FlushE, PCD, PCE);
-    floprs #( `RFIDX_WIDTH) Ereg2(clk,  reset, FlushE, Rs1D, Rs1E);
-    floprs #( `RFIDX_WIDTH) Ereg3(clk, reset, FlushE, Rs2D, Rs2E);
-    floprs #( `RFIDX_WIDTH) Ereg4(clk,  reset, FlushE, RdD, RdE );
-    floprs #(`XLEN) Ereg5(clk,  reset, FlushE, ImmExtD, ImmExtE);
-    floprs #(`XLEN) Ereg6(clk,  reset, FlushE, PCPlus4D, PCPlus4E);
-    floprs #(`XLEN) Ereg7(clk,  reset, FlushE, RD2D , RD2E);
-    floprs #(`XLEN) Ereg8(clk,  reset, FlushE, RD1D, RD1E);
-    floprs #(3)     Ereg_FUN3(clk,  reset, FlushE, fun3D, fun3E);
+	//regE  为i了适应地形能加入en
+    floprs #(`XLEN) Ereg1(clk, reset, FlushE,             PCD, PCE);
+    floprs #( `RFIDX_WIDTH) Ereg2(clk,  reset, FlushE,    Rs1D, Rs1E);
+    floprs #( `RFIDX_WIDTH) Ereg3(clk, reset, FlushE,     Rs2D, Rs2E);
+    floprs #( `RFIDX_WIDTH) Ereg4(clk,  reset, FlushE,    RdD, RdE );
+    floprs #(`XLEN) Ereg5(clk,  reset, FlushE,            ImmExtD, ImmExtE);
+    floprs #(`XLEN) Ereg6(clk,  reset, FlushE,            PCPlus4D, PCPlus4E);
+    floprs #(`XLEN) Ereg7(clk,  reset, FlushE,            RD2D , RD2E);
+    floprs #(`XLEN) Ereg8(clk,  reset, FlushE,            RD1D, RD1E);
+    floprs #(3)     Ereg_FUN3(clk,  reset, FlushE,        fun3D, fun3E);
 	
 	//regM
-    flopr #(`XLEN) Mreg1 (clk, reset , ALUResult, ALUResultM);
-    flopr #(`XLEN) Mreg2 (clk, reset , WriteDataE,WriteDataM);
-    flopr #( `RFIDX_WIDTH) Mreg3 (clk, reset , RdE, RdM);
-    flopr #(`XLEN) Mreg4 (clk, reset , PCPlus4E, PCPlus4M);
-	flopr #(`XLEN) Mreg11(clk, reset , PCTargetE, PCTargetM);
-    flopr #(3)     Mreg_FUN3(clk, reset , fun3E, fun3M);
+    flopr #(`XLEN) Mreg1 (clk, reset ,            ALUResult, ALUResultM);
+    flopr #(`XLEN) Mreg2 (clk, reset ,            WriteDataE,WriteDataM);
+    flopr #( `RFIDX_WIDTH) Mreg3 (clk, reset ,    RdE, RdM);
+    flopr #(`XLEN) Mreg4 (clk, reset ,            PCPlus4E, PCPlus4M);
+	flopr #(`XLEN) Mreg11(clk, reset ,            PCTargetE, PCTargetM);
+    flopr #(3)     Mreg_FUN3(clk, reset ,         fun3E, fun3M);
 	
 	//RegW
-    flopr #(`XLEN) Wreg1(clk, reset , ALUResultM, ALUResultW);
+    flopr #(`XLEN) Wreg1(clk, reset ,   ALUResultM, ALUResultW);
     flopr #(`XLEN) Wreg2(clk, reset , ReadData, ReadDataW);
     flopr #( `RFIDX_WIDTH) Wreg3(clk, reset , RdM, RdW);
     flopr #(`XLEN) Wreg4(clk, reset , PCPlus4M, PCPlus4W);

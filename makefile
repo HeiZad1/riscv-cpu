@@ -19,8 +19,8 @@ LDFLAGS = -lreadline -L$(NEMU_DIR) -Wl,-rpath=$(NEMU_DIR) -Wl,-rpath-link=$(NEMU
 # Verilog源文件
 VERILOG_SRCS = $(wildcard $(VERILOG_DIR)/*.v) 
 VERILOG_SRCS += $(shell find $(VERILOG_DIR_soc)/ -name "*.v")
-CPP_SRCS = ./csrc/soc_sim.cpp
-#CPP_SRCS = $(wildcard $(CPP_DIR)/*.cpp)
+#CPP_SRCS = ./csrc/soc_sim.cpp
+CPP_SRCS = $(wildcard $(CPP_DIR)/*.cpp)
 
 # 生成的对象文件目录
 OBJ_DIR = obj_dir
@@ -45,7 +45,7 @@ compile: $(OBJ_DIR)/V$(TOP).mk
 
 # 运行仿真
 run: compile
-	./$(OBJ_DIR)/V$(TOP) /home/swf/ysyx/ics2023/am-kernels/tests/cpu-tests/build/add-riscv32e-npc.bin
+	./$(OBJ_DIR)/V$(TOP) /home/swf/ysyx/ics2023/am-kernels/tests/cpu-tests/build/dummy-riscv32e-soc.bin
 
 view: $(VCD_FILE)
 	gtkwave $(VCD_FILE)
